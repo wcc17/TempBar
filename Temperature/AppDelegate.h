@@ -16,7 +16,10 @@
 
 - (IBAction)settingsButtonClicked:(NSButton *)sender;
 
-- (void) makeHTTPRequest:(NSString *) zipCode;
+- (void) makeLocationRequest:(NSString *) zipCode;
+- (void) handleLocationResponse:(NSData *) data;
 
+- (void) makeWeatherRequest:(double) latitude :(double) longitude;
+- (void) handleWeatherResponse:(NSData *) data;
 @end
 

@@ -411,6 +411,7 @@
 				DEVELOPMENT_TEAM = 4SRE59FW94;
 				INFOPLIST_FILE = Temperature/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = wcc17.Temperature;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -425,6 +426,7 @@
 				DEVELOPMENT_TEAM = 4SRE59FW94;
 				INFOPLIST_FILE = Temperature/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = wcc17.Temperature;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -503,6 +505,7 @@
 				12DBD77B1D9803C0001EFE98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		12DBD77C1D9803C0001EFE98 /* Build configuration list for PBXNativeTarget "TemperatureTests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +514,7 @@
 				12DBD77E1D9803C0001EFE98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		12DBD77F1D9803C0001EFE98 /* Build configuration list for PBXNativeTarget "TemperatureUITests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +523,7 @@
 				12DBD7811D9803C0001EFE98 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
