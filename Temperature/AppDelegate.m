@@ -27,7 +27,11 @@
     // The image gets a blue background when the item is selected
     _statusItem.highlightMode = YES;
     
-    [GoogleGeoAPIService getLocationFromZip:@"40330"];
+    [GoogleGeoAPIService getLocationFromZip:@"40330" completionHandler:^(Location *location){
+        NSLog(@"whatup tho");
+        NSLog(@"%g", location.latitude);
+        NSLog(@"%g", location.longitude);
+    }];
     [DarkSkyAPIService makeWeatherRequest:0 :0];
 }
 

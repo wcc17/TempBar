@@ -10,16 +10,12 @@
 
 @implementation GoogleGeoAPIService
 
-+ (Location *) getLocationFromZip:(NSString *) zipCode {
-    
-    Location *location = [[Location alloc] init];
-    
-    [self makeLocationRequest:zipCode :location];
-    
-    return location;
+//TODO: can probably get rid of this method now
++ (void) getLocationFromZip:(NSString *) zipCode completionHandler:(void(^)(Location *location)) completionHandler {
+    [self makeLocationRequest:zipCode completionHandler: completionHandler];
 }
 
-+ (void) makeLocationRequest:(NSString *) zipCode :(Location *) location {
++ (void) makeLocationRequest:(NSString *) zipCode completionHandler:(void(^)(Location *location)) completionHandler {
     
     //TODO: get out of here
     NSString *GOOGLE_API_KEY = @"AIzaSyC4aNXiL4hsMKhVI2xmSljOj1M1_Q1DvvA";
@@ -34,20 +30,22 @@
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
         //TODO: anything useful in response that isnt in data?
-        [self handleLocationResponse: data :location];
+        [self handleLocationResponse: data completionHandler: completionHandler];
     }] resume];
 }
 
-+ (void) handleLocationResponse:(NSData *) data :(Location *) location {
++ (void) handleLocationResponse:(NSData *) data completionHandler:(void(^)(Location *location)) completionHandler {
     //handle response
     NSLog(@"handling response");
     
     NSString *test = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
-    location.longitude = 456;
-    location.latitude = 1256;
-    
     //NSLog(test);
+    
+    Location *location = [[Location alloc] init];
+    location.latitude = 12345;
+    location.longitude = 56789;
+    completionHandler(location);
 }
 
 @end
