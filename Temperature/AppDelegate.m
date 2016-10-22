@@ -13,6 +13,7 @@
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
+
 @end
 
 @implementation AppDelegate
@@ -27,12 +28,24 @@
     // The image gets a blue background when the item is selected
     _statusItem.highlightMode = YES;
     
-    [GoogleGeoAPIService getLocationFromZip:@"40330" completionHandler:^(Location *location){
+    
+    NSPopover *popover = [[NSPopover alloc] init];
+    
+    
+    [GoogleGeoAPIService getLocationFromZip:@"40517" completionHandler:^(Location *location){
         NSLog(@"whatup tho");
-        NSLog(@"%g", location.latitude);
-        NSLog(@"%g", location.longitude);
+        
+        if(location != nil) {
+            NSLog(@"%g", location.latitude);
+            NSLog(@"%g", location.longitude);
+            
+            //need a callback for this as well I guess
+            [DarkSkyAPIService makeWeatherRequest: location completionHandler:^(NSNumber *temperature) {
+                NSLog(@"handling temperature stuff now");
+                NSLog(@"temperature in Lexington: %d", [temperature intValue]);
+            }];
+        }
     }];
-    [DarkSkyAPIService makeWeatherRequest:0 :0];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

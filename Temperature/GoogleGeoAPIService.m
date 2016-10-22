@@ -30,22 +30,33 @@
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
         //TODO: anything useful in response that isnt in data?
-        [self handleLocationResponse: data completionHandler: completionHandler];
+        
+        Location *location = [self handleLocationResponse: data];
+        
+        completionHandler(location);
     }] resume];
 }
 
-+ (void) handleLocationResponse:(NSData *) data completionHandler:(void(^)(Location *location)) completionHandler {
++ (Location *) handleLocationResponse:(NSData *) data {
     //handle response
     NSLog(@"handling response");
     
-    NSString *test = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(error == nil) {
+        NSArray *resultsArray = [root objectForKey:@"results"];
+        NSDictionary *resultsDict = [resultsArray objectAtIndex:0];
+        NSDictionary *geometryDict = [resultsDict objectForKey:@"geometry"];
+        NSDictionary *locationDict = [geometryDict objectForKey:@"location"];
+        
+        Location *location = [[Location alloc] init];
+        location.latitude = [[locationDict objectForKey:@"lat"] doubleValue];
+        location.longitude = [[locationDict objectForKey:@"lng"] doubleValue];
+        
+        return location;
+    }
     
-    //NSLog(test);
-    
-    Location *location = [[Location alloc] init];
-    location.latitude = 12345;
-    location.longitude = 56789;
-    completionHandler(location);
+    return nil;
 }
 
 @end

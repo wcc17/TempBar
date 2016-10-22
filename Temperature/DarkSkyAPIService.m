@@ -10,11 +10,11 @@
 
 @implementation DarkSkyAPIService
 
-+ (void) makeWeatherRequest:(double) latitude :(double) longitude {
-    
-    //TODO: remove
-    latitude = 37.8267;
-    longitude = -122.4233;
++ (void) getTemperatureFromLocation:(Location *)location completionHandler:(void (^)(NSNumber *temperature)) completionHandler {
+    [self makeWeatherRequest: location completionHandler: completionHandler];
+}
+
++ (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(NSNumber *temperature)) completionHandler {
     
     //TODO: get out of here
     NSString *DARKSKY_API_KEY = @"fb30f9d966ec63fc374f93f2b5816b94";
@@ -24,8 +24,8 @@
     NSString *weatherURLString = [NSString stringWithFormat:@"%@/%@/%@,%@",
                                   darkSkyURL,
                                   DARKSKY_API_KEY,
-                                  [NSString stringWithFormat:@"%lf", latitude],
-                                  [NSString stringWithFormat:@"%lf", longitude]];
+                                  [NSString stringWithFormat:@"%lf", location.latitude],
+                                  [NSString stringWithFormat:@"%lf", location.longitude]];
     
     NSURL *requestURL = [NSURL URLWithString:weatherURLString];
     
@@ -33,16 +33,25 @@
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
         //TODO: anything useful in response that isnt in data?
-        [self handleWeatherResponse:data];
+        
+        NSNumber *temperature = [self handleWeatherResponse: data];
+        completionHandler(temperature);
     }] resume];
 }
 
-+ (void) handleWeatherResponse:(NSData *) data {
++ (NSNumber *) handleWeatherResponse:(NSData *) data {
     NSLog(@"handling weather response");
     
-    NSString *test = [[NSString alloc] initWithData:data encoding: NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(error == nil) {
+        NSDictionary *currentlyDict = [root objectForKey:@"currently"];
+        NSNumber *temperature = [NSNumber numberWithInt:[[currentlyDict objectForKey:@"temperature"] intValue]];
+        
+        return temperature;
+    }
     
-    //NSLog(test);
+    return nil;
 }
 
 @end
