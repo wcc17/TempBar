@@ -10,10 +10,14 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
+@property (weak) IBOutlet NSView *view;
+
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (weak) IBOutlet NSButton *settingsButton;
 @property (weak) IBOutlet NSTextField *temperatureLabel;
 
 - (IBAction)settingsButtonClicked:(NSButton *)sender;
+
+- (void)initializeStatusMenu;
 @end
 

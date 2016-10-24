@@ -11,26 +11,13 @@
 #import "GoogleGeoAPIService.h"
 
 @interface AppDelegate ()
-
-@property (weak) IBOutlet NSWindow *window;
-
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
-    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-    
-    // The text that will be shown in the menu bar
-    _statusItem.title = @"78°";
-    
-    // The image gets a blue background when the item is selected
-    _statusItem.highlightMode = YES;
-    
-    
-    NSPopover *popover = [[NSPopover alloc] init];
-    
+    [self initializeStatusMenu];
     
     [GoogleGeoAPIService getLocationFromZip:@"40517" completionHandler:^(Location *location){
         NSLog(@"whatup tho");
@@ -50,6 +37,23 @@
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
+}
+
+- (void)initializeStatusMenu {
+    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    
+    // The text that will be shown in the menu bar
+    _statusItem.title = @"78°";
+    
+    // The image gets a blue background when the item is selected
+    _statusItem.highlightMode = YES;
+    
+    NSMenu *menu = [[NSMenu alloc] init];
+    [menu addItemWithTitle:@"Change Location" action:@selector(openFeedbin:) keyEquivalent:@""];
+    
+    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
+    [menu addItemWithTitle:@"Exit" action:@selector(terminate:) keyEquivalent:@""];
+    _statusItem.menu = menu;
 }
 
 - (IBAction)settingsButtonClicked:(NSButton *)sender {
