@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12215FDE1DC0477C0022E13D /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12215FDD1DC0477C0022E13D /* SettingsWindowController.m */; };
+		12215FE21DC047F30022E13D /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12215FE11DC047F30022E13D /* SettingsWindow.xib */; };
+		12215FE51DC04FF70022E13D /* StatusBarHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 12215FE41DC04FF70022E13D /* StatusBarHandler.m */; };
 		123AFB711DB6EC0A00EE3D40 /* DarkSkyAPIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 123AFB701DB6EC0A00EE3D40 /* DarkSkyAPIService.m */; };
 		123AFB741DB6EC6500EE3D40 /* GoogleGeoAPIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 123AFB731DB6EC6500EE3D40 /* GoogleGeoAPIService.m */; };
 		123AFB771DB7010E00EE3D40 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 123AFB761DB7010E00EE3D40 /* Location.m */; };
@@ -36,6 +39,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		12215FDC1DC0477C0022E13D /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
+		12215FDD1DC0477C0022E13D /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
+		12215FE11DC047F30022E13D /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
+		12215FE31DC04FF70022E13D /* StatusBarHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusBarHandler.h; sourceTree = "<group>"; };
+		12215FE41DC04FF70022E13D /* StatusBarHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusBarHandler.m; sourceTree = "<group>"; };
 		123AFB6F1DB6EC0A00EE3D40 /* DarkSkyAPIService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DarkSkyAPIService.h; sourceTree = "<group>"; };
 		123AFB701DB6EC0A00EE3D40 /* DarkSkyAPIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DarkSkyAPIService.m; sourceTree = "<group>"; };
 		123AFB721DB6EC6500EE3D40 /* GoogleGeoAPIService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoogleGeoAPIService.h; sourceTree = "<group>"; };
@@ -117,6 +125,11 @@
 				123AFB731DB6EC6500EE3D40 /* GoogleGeoAPIService.m */,
 				123AFB751DB7010E00EE3D40 /* Location.h */,
 				123AFB761DB7010E00EE3D40 /* Location.m */,
+				12215FDC1DC0477C0022E13D /* SettingsWindowController.h */,
+				12215FDD1DC0477C0022E13D /* SettingsWindowController.m */,
+				12215FE11DC047F30022E13D /* SettingsWindow.xib */,
+				12215FE31DC04FF70022E13D /* StatusBarHandler.h */,
+				12215FE41DC04FF70022E13D /* StatusBarHandler.m */,
 			);
 			path = Temperature;
 			sourceTree = "<group>";
@@ -258,6 +271,7 @@
 			files = (
 				12DBD75C1D9803C0001EFE98 /* Assets.xcassets in Resources */,
 				12DBD75F1D9803C0001EFE98 /* MainMenu.xib in Resources */,
+				12215FE21DC047F30022E13D /* SettingsWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +299,9 @@
 				12DBD75A1D9803C0001EFE98 /* main.m in Sources */,
 				123AFB771DB7010E00EE3D40 /* Location.m in Sources */,
 				123AFB711DB6EC0A00EE3D40 /* DarkSkyAPIService.m in Sources */,
+				12215FE51DC04FF70022E13D /* StatusBarHandler.m in Sources */,
 				12DBD7571D9803C0001EFE98 /* AppDelegate.m in Sources */,
+				12215FDE1DC0477C0022E13D /* SettingsWindowController.m in Sources */,
 				123AFB741DB6EC6500EE3D40 /* GoogleGeoAPIService.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
