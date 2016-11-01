@@ -16,9 +16,16 @@
 @property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) SettingsWindowController *settingsWindowController;
 
+@property (strong, nonatomic) NSTimer *refreshTimer;
+@property (strong, nonatomic) Location *location;
+@property int timeInterval;
+@property NSString* timeUnit;
+
 + (StatusBarHandler *) instance;
 - (void) openSettings;
 - (void) initializeStatusMenu;
 - (void) setTemperatureFromLocation: (NSString *)zipCode;
+- (void) executeDarkSkyRequest: (Location *) location;
+- (void) executeDarkSkyRequestNoLocation;
 
 @end

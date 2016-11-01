@@ -10,11 +10,19 @@
 
 @interface SettingsWindowController : NSWindowController
 
+@property int timeInterval;
 @property (strong) IBOutlet NSWindow *settingsWindow;
 
 @property (weak) IBOutlet NSTextField *zipCodeTextField;
+@property (weak) IBOutlet NSTextField *timeTextField;
+@property (weak) IBOutlet NSPopUpButton *timeUnitPopUp;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
+- (IBAction)onTimeStepper:(NSStepper *)sender;
+
+- (void)adjustWindowPosition;
+- (int)handleTime: (NSString*)selectedTimeUnit :(NSString*) timeText;
+- (int)getSecondsFromTimeUnit:(NSString *)selectedTimeUnit :(int) time;
 
 @end

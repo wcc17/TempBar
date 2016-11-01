@@ -10,11 +10,6 @@
 
 @implementation GoogleGeoAPIService
 
-//TODO: can probably get rid of this method now
-+ (void) getLocationFromZip:(NSString *) zipCode completionHandler:(void(^)(Location *location)) completionHandler {
-    [self makeLocationRequest:zipCode completionHandler: completionHandler];
-}
-
 + (void) makeLocationRequest:(NSString *) zipCode completionHandler:(void(^)(Location *location)) completionHandler {
     
     //TODO: get out of here
@@ -32,6 +27,7 @@
         //TODO: anything useful in response that isnt in data?
         
         Location *location = [self handleLocationResponse: data];
+        location.zipCode = zipCode;
         
         completionHandler(location);
     }] resume];

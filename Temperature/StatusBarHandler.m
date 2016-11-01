@@ -50,25 +50,52 @@
     self.statusItem.menu = menu;
 }
 
-//TODO: move to its own class probably
+//Get location from Google and then get the temperature from DarkSkyAPI
 - (void) setTemperatureFromLocation: (NSString *) zipCode {
     
-    [GoogleGeoAPIService getLocationFromZip:zipCode completionHandler:^(Location *location){
-        NSLog(@"whatup tho");
+    [GoogleGeoAPIService makeLocationRequest:zipCode completionHandler:^(Location *loc){
+        [self executeDarkSkyRequest: loc];
+    }];
+}
+
+//Makes a new weather request and sets the status bar temperature. Restarts the timer
+- (void) executeDarkSkyRequest: (Location *) loc {
+    //if refreshTimer is nil, we're either just starting up the application or no time interval (0) was set
+    if(self.refreshTimer != nil) {
+        [self.refreshTimer invalidate];
+        self.refreshTimer = nil;
+    }
+    
+    if(loc != nil) {
+        self.location = loc;
+        NSLog(@"%g", self.location.latitude);
+        NSLog(@"%g", self.location.longitude);
+    }
+    
+    //execute darksky request and handle the data thats returned
+    [DarkSkyAPIService makeWeatherRequest: self.location completionHandler:^(NSNumber *temperature) {
+        NSLog(@"preparing dark sky api request");
+        NSLog(@"temperature: %d", [temperature intValue]);
+        NSLog(@" ");
+    
+        self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
         
-        if(location != nil) {
-            NSLog(@"%g", location.latitude);
-            NSLog(@"%g", location.longitude);
-            
-            //need a callback for this as well I guess
-            [DarkSkyAPIService makeWeatherRequest: location completionHandler:^(NSNumber *temperature) {
-                NSLog(@"handling temperature stuff now");
-                NSLog(@"temperature in Lexington: %d", [temperature intValue]);
-                
-                self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
-            }];
+        if(self.timeInterval > 0) {
+            //making a new timer for each request so that the temperature refreshes later
+            self.refreshTimer = [NSTimer timerWithTimeInterval:self.timeInterval
+                                                        target:self
+                                                      selector:@selector(executeDarkSkyRequestNoLocation)
+                                                      userInfo:nil
+                                                       repeats:NO];
+            [[NSRunLoop mainRunLoop] addTimer:self.refreshTimer forMode:NSDefaultRunLoopMode];
         }
     }];
+}
+
+//Only called after timer is done running. Will run weather request without giving it a new location
+- (void) executeDarkSkyRequestNoLocation {
+    NSLog(@"Time interval passed, starting weather request process");
+    [self executeDarkSkyRequest:nil];
 }
 
 @end

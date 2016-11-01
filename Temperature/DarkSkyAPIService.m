@@ -10,14 +10,11 @@
 
 @implementation DarkSkyAPIService
 
-+ (void) getTemperatureFromLocation:(Location *)location completionHandler:(void (^)(NSNumber *temperature)) completionHandler {
-    [self makeWeatherRequest: location completionHandler: completionHandler];
-}
-
 + (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(NSNumber *temperature)) completionHandler {
     
     //TODO: get out of here
-    NSString *DARKSKY_API_KEY = @"fb30f9d966ec63fc374f93f2b5816b94";
+    //NSString *DARKSKY_API_KEY = @"fb30f9d966ec63fc374f93f2b5816b94"; for gmail email
+    NSString *DARKSKY_API_KEY = @"8876a0ff367275b80e907e0fa4cb4c75";
     
     NSString *darkSkyURL = @"https://api.darksky.net/forecast";
     
@@ -33,6 +30,7 @@
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
         //TODO: anything useful in response that isnt in data?
+        NSLog(@"Dark sky request made");
         
         NSNumber *temperature = [self handleWeatherResponse: data];
         completionHandler(temperature);
