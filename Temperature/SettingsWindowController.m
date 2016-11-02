@@ -28,7 +28,7 @@
     
     NSString *zipCodeFromStatusBar = nil;
     if ([StatusBarHandler instance].location != nil) {
-        zipCodeFromStatusBar = [StatusBarHandler instance].location.zipCode;
+        zipCodeFromStatusBar = [StatusBarHandler instance].zipCode;
     }
     int timeIntervalFromStatusBar = [StatusBarHandler instance].timeInterval;
     NSString *timeUnitFromStatusBar = [StatusBarHandler instance].timeUnit;
@@ -41,7 +41,7 @@
         NSInteger timeUnitIndex = [self.timeUnitPopUp indexOfItemWithTitle:timeUnitFromStatusBar];
         [self.timeUnitPopUp selectItemAtIndex: (int)timeUnitIndex];
         
-        int refreshTime = [self getSecondsFromTimeUnit: [self.timeUnitPopUp stringValue] :timeIntervalFromStatusBar];
+        int refreshTime = [self getSecondsFromTimeUnit: [self.timeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
         [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
     } else {
         [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", 0]];
@@ -75,10 +75,12 @@
     NSString *selectedTimeUnit = [self.timeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.timeTextField.stringValue;
     
-    //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them
+    //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them. also set the new zip code
     [StatusBarHandler instance].timeInterval = [self handleTime:selectedTimeUnit :timeText];
     [StatusBarHandler instance].timeUnit = selectedTimeUnit;
+    [StatusBarHandler instance].zipCode = zipCode;
     
+    //go ahead and refresh the temperature based on the new information set in this menu
     [[StatusBarHandler instance] setTemperatureFromLocation: zipCode];
     [self.settingsWindow close];
 }
@@ -88,11 +90,11 @@
     
     //need to convert unit to seconds
     if([selectedTimeUnit isEqual:@"Minute(s)"]) {
-        refreshTime *= 10;
+        refreshTime *= MINUTE_IN_SECONDS;
     } else if([selectedTimeUnit isEqual:@"Hour(s)"]) {
-        refreshTime *= 100;
+        refreshTime *= HOUR_IN_SECONDS;
     } else if([selectedTimeUnit isEqual:@"Day(s)"]) {
-        refreshTime *= 1000;
+        refreshTime *= DAY_IN_SECONDS;
     }
     
     NSLog(@"Refresh time: %d", refreshTime);
@@ -105,11 +107,11 @@
     
     //need to convert unit to seconds
     if([selectedTimeUnit isEqual:@"Minute(s)"]) {
-        refreshTime /= 10;
+        refreshTime /= MINUTE_IN_SECONDS;
     } else if([selectedTimeUnit isEqual:@"Hour(s)"]) {
-        refreshTime /= 100;
+        refreshTime /= HOUR_IN_SECONDS;
     } else if([selectedTimeUnit isEqual:@"Day(s)"]) {
-        refreshTime /= 1000;
+        refreshTime /= DAY_IN_SECONDS;
     }
     
     NSLog(@"Refresh time: %d", refreshTime);

@@ -12,6 +12,5 @@
 
 @property (readwrite, nonatomic) double latitude;
 @property (readwrite, nonatomic) double longitude;
-@property (readwrite, nonatomic) NSString *zipCode;
 
 @end

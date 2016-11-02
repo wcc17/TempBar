@@ -27,8 +27,6 @@
         //TODO: anything useful in response that isnt in data?
         
         Location *location = [self handleLocationResponse: data];
-        location.zipCode = zipCode;
-        
         completionHandler(location);
     }] resume];
 }

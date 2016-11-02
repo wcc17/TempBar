@@ -29,7 +29,7 @@
     [self.settingsWindowController showWindow:self];
 }
 
-- (void) initializeStatusMenu {
+- (void) initialize {
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     
     // The text that will be shown in the menu bar
@@ -38,16 +38,37 @@
     // The image gets a blue background when the item is selected
     self.statusItem.highlightMode = YES;
     
+    //allocate menu and settings menu item
     NSMenu *menu = [[NSMenu alloc] init];
-    
     NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:@selector(openSettings) keyEquivalent:@""];
+    
+    //add info to menu items
     [settingsMenuItem setTarget:self];
     [menu addItem:settingsMenuItem];
-    
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItemWithTitle:@"Exit" action:@selector(terminate:) keyEquivalent:@""];
     
+    //set the statusmenuItem menu to the new menu
     self.statusItem.menu = menu;
+    
+    //load the last set zip code (or default if its never been set before
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.zipCode = [defaults stringForKey:@"zipCode"];
+    self.timeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
+    self.timeUnit = [defaults stringForKey:@"refreshTimeUnit"];
+    
+    [self setTemperatureFromLocation:self.zipCode];
+}
+
+- (void) tearDown {
+    NSLog(@"Writing zip code, time interval, time unit to NSDefaults");
+    
+    //Write current user values to NSDefaults
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:self.zipCode forKey:@"zipCode"];
+    [defaults setInteger:self.timeInterval forKey:@"refreshTimeInterval"];
+    [defaults setValue:self.timeUnit forKey:@"refreshTimeUnit"];
+    [defaults synchronize];
 }
 
 //Get location from Google and then get the temperature from DarkSkyAPI

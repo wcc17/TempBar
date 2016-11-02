@@ -50,6 +50,7 @@
 		123AFB731DB6EC6500EE3D40 /* GoogleGeoAPIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleGeoAPIService.m; sourceTree = "<group>"; };
 		123AFB751DB7010E00EE3D40 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		123AFB761DB7010E00EE3D40 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		127F7B311DC917D70083FEC5 /* Temperature.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Temperature.entitlements; sourceTree = "<group>"; };
 		12DBD7521D9803C0001EFE98 /* Temperature.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Temperature.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12DBD7551D9803C0001EFE98 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		12DBD7561D9803C0001EFE98 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		12DBD7541D9803C0001EFE98 /* Temperature */ = {
 			isa = PBXGroup;
 			children = (
+				127F7B311DC917D70083FEC5 /* Temperature.entitlements */,
 				12DBD7551D9803C0001EFE98 /* AppDelegate.h */,
 				12DBD7561D9803C0001EFE98 /* AppDelegate.m */,
 				12DBD75B1D9803C0001EFE98 /* Assets.xcassets */,
@@ -229,6 +231,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 4SRE59FW94;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					12DBD7641D9803C0001EFE98 = {
 						CreatedOnToolsVersion = 8.0;
@@ -440,6 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Temperature/Temperature.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4SRE59FW94;
@@ -455,6 +463,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Temperature/Temperature.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 4SRE59FW94;
