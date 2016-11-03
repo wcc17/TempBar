@@ -22,44 +22,36 @@
     
     [self adjustWindowPosition];
     
-    //TODO!!: look into enums for handling the time units instead of if elsing strings
+    //Initialize Pop Up button for units of time
     [self.timeUnitPopUp removeAllItems];
     [self.timeUnitPopUp addItemsWithTitles:@[ @"Second(s)", @"Minute(s)", @"Hour(s)", @"Day(s)" ]];
     
-    NSString *zipCodeFromStatusBar = nil;
-    if ([StatusBarHandler instance].location != nil) {
-        zipCodeFromStatusBar = [StatusBarHandler instance].zipCode;
-    }
+    //Get zip code, time interval, and units of time from StatusBarHandler
+    NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarHandler instance].zipCode;
     int timeIntervalFromStatusBar = [StatusBarHandler instance].timeInterval;
     NSString *timeUnitFromStatusBar = [StatusBarHandler instance].timeUnit;
     
-    if(zipCodeFromStatusBar != nil) {
-        [self.zipCodeTextField setStringValue:zipCodeFromStatusBar];
-    }
     
-    if(timeUnitFromStatusBar != nil) {
-        NSInteger timeUnitIndex = [self.timeUnitPopUp indexOfItemWithTitle:timeUnitFromStatusBar];
-        [self.timeUnitPopUp selectItemAtIndex: (int)timeUnitIndex];
-        
-        int refreshTime = [self getSecondsFromTimeUnit: [self.timeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
-        [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
-    } else {
-        [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", 0]];
-    }
+    //set the zip code
+    [self.zipCodeTextField setStringValue:zipCodeFromStatusBar];
+    
+    //set the unit of time
+    NSInteger timeUnitIndex = [self.timeUnitPopUp indexOfItemWithTitle:timeUnitFromStatusBar];
+    [self.timeUnitPopUp selectItemAtIndex: (int)timeUnitIndex];
+    
+    //set the refresh time interval
+    int refreshTime = [self getSecondsFromTimeUnit: [self.timeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
+    [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
 }
 
 - (void) adjustWindowPosition {
     NSLog(@"Adjusting settings window position");
     
-    //This puts it at the literal center of the screen, not taking into account the space occupied by the dock and menu bar.
-    //If you want to do that, change [[window screen] frame] to [[window screen visibleFrame].
+    //Puts at center of screen based on pos of status bar and dock. change [[window screen] frame] to [[window screen visibleFrame] to ignore status bar and dock
     CGFloat xPos = NSWidth([[self.settingsWindow screen] visibleFrame])/2 - NSWidth([self.settingsWindow frame])/2;
     CGFloat yPos = NSHeight([[self.settingsWindow screen] visibleFrame])/2 - NSHeight([self.settingsWindow frame])/2;
+    
     [self.settingsWindow setFrame:NSMakeRect(xPos, yPos, NSWidth([self.settingsWindow frame]), NSHeight([self.settingsWindow frame])) display:YES];
-}
-
-- (IBAction)onCancelClick:(NSButton *)sender {
-    [self.settingsWindow close];
 }
 
 - (IBAction)onTimeStepper:(NSStepper *)sender {
@@ -70,13 +62,11 @@
 
 - (IBAction)onConfirmClick:(NSButton *)sender {
     NSString *zipCode = self.zipCodeTextField.stringValue;
-    
-    //TODO!!: look into enums for handling the time units instead of if elsing strings
     NSString *selectedTimeUnit = [self.timeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.timeTextField.stringValue;
     
     //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them. also set the new zip code
-    [StatusBarHandler instance].timeInterval = [self handleTime:selectedTimeUnit :timeText];
+    [StatusBarHandler instance].timeInterval = [self convertSecondsToTimeUnit:selectedTimeUnit :timeText];
     [StatusBarHandler instance].timeUnit = selectedTimeUnit;
     [StatusBarHandler instance].zipCode = zipCode;
     
@@ -85,7 +75,11 @@
     [self.settingsWindow close];
 }
 
-- (int) handleTime:(NSString *)selectedTimeUnit :(NSString *) timeText {
+- (IBAction)onCancelClick:(NSButton *)sender {
+    [self.settingsWindow close];
+}
+
+- (int) convertSecondsToTimeUnit:(NSString *)selectedTimeUnit :(NSString *) timeText {
     int refreshTime = [timeText intValue];
     
     //need to convert unit to seconds

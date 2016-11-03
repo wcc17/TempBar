@@ -26,7 +26,7 @@
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 
 - (void)adjustWindowPosition;
-- (int)handleTime: (NSString*)selectedTimeUnit :(NSString*) timeText;
+- (int)convertSecondsToTimeUnit: (NSString*)selectedTimeUnit :(NSString*) timeText;
 - (int)getSecondsFromTimeUnit:(NSString *)selectedTimeUnit :(int) time;
 
 @end
