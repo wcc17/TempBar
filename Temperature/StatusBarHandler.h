@@ -18,7 +18,6 @@
 
 @property (strong, nonatomic) NSTimer *refreshTimer;
 @property (strong, nonatomic) Location *location;
-@property (strong, nonatomic) NSString *zipCode;
 
 @property int timeInterval;
 @property NSString* timeUnit;
@@ -30,5 +29,6 @@
 - (void) setTemperatureFromLocation: (NSString *)zipCode;
 - (void) executeDarkSkyRequest: (Location *) location;
 - (void) executeDarkSkyRequestNoLocation;
+- (void) handleRefreshTimer;
 
 @end

@@ -12,5 +12,5 @@
 @interface GoogleGeoAPIService : NSObject
 
 + (void) makeLocationRequest:(NSString *) zipCode completionHandler:(void(^)(Location *location)) completionHandler;
-+ (Location *) handleLocationResponse:(NSData *) data;
++ (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode;
 @end

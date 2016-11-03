@@ -27,7 +27,7 @@
     [self.timeUnitPopUp addItemsWithTitles:@[ @"Second(s)", @"Minute(s)", @"Hour(s)", @"Day(s)" ]];
     
     //Get zip code, time interval, and units of time from StatusBarHandler
-    NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarHandler instance].zipCode;
+    NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarHandler instance].location.zipCode;
     int timeIntervalFromStatusBar = [StatusBarHandler instance].timeInterval;
     NSString *timeUnitFromStatusBar = [StatusBarHandler instance].timeUnit;
     
@@ -68,7 +68,7 @@
     //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them. also set the new zip code
     [StatusBarHandler instance].timeInterval = [self convertSecondsToTimeUnit:selectedTimeUnit :timeText];
     [StatusBarHandler instance].timeUnit = selectedTimeUnit;
-    [StatusBarHandler instance].zipCode = zipCode;
+    [StatusBarHandler instance].location.zipCode = zipCode;
     
     //go ahead and refresh the temperature based on the new information set in this menu
     [[StatusBarHandler instance] setTemperatureFromLocation: zipCode];

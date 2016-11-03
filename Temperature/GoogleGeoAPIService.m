@@ -24,14 +24,13 @@
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
-        //TODO: anything useful in response that isnt in data?
         
-        Location *location = [self handleLocationResponse: data];
+        Location *location = [self handleLocationResponse: data :zipCode];
         completionHandler(location);
     }] resume];
 }
 
-+ (Location *) handleLocationResponse:(NSData *) data {
++ (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode {
     //handle response
     NSLog(@"handling response");
     
@@ -44,6 +43,7 @@
         NSDictionary *locationDict = [geometryDict objectForKey:@"location"];
         
         Location *location = [[Location alloc] init];
+        location.zipCode = zipCode;
         location.latitude = [[locationDict objectForKey:@"lat"] doubleValue];
         location.longitude = [[locationDict objectForKey:@"lng"] doubleValue];
         
