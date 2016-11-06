@@ -13,7 +13,10 @@
 @property (readwrite, nonatomic) double latitude;
 @property (readwrite, nonatomic) double longitude;
 @property (readwrite, nonatomic) NSString *city;
-@property (readwrite, nonatomic) NSString *state;
 @property (readwrite, nonatomic) NSString *zipCode;
+@property (readwrite, nonatomic) NSString *stateLong;
+@property (readwrite, nonatomic) NSString *stateShort;
+@property (readwrite, nonatomic) NSString *countryLong;
+@property (readwrite, nonatomic) NSString *countryShort;
 
 @end

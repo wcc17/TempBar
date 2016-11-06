@@ -16,7 +16,14 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     
     //set default value to one of Lexington, KY zip codes in case a zip code hasn't been saved
-    NSDictionary *userDefaultsDefaults = @{ @"zipCode": @"40517", @"refreshTimeInterval": @3600, @"refreshTimeUnit": @"Hour(s)" };
+    NSDictionary *userDefaultsDefaults = @{ @"zipCode": @"40517",
+                                            @"city": @"Lexington",
+                                            @"stateLong": @"Kentucky",
+                                            @"stateShort": @"KY",
+                                            @"countryLong": @"United States",
+                                            @"countryShort": @"US",
+                                            @"refreshTimeInterval": @3600,
+                                            @"refreshTimeUnit": @"Hour(s)" };
     [NSUserDefaults.standardUserDefaults registerDefaults:userDefaultsDefaults];
     
     //Initialize the status menu object

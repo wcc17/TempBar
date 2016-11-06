@@ -40,27 +40,32 @@
     
     //initialize the location object
     self.location = [[Location alloc] init];
+    [self loadDefaults];
     
     //allocate menu and settings menu item
+    [self initializeMenu];
+    
+    [self setTemperatureFromLocation:self.location.zipCode];
+}
+
+- (void) initializeMenu {
     NSMenu *menu = [[NSMenu alloc] init];
     NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:@selector(openSettings) keyEquivalent:@""];
+    
+    NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
+    self.infoMenuItem = [[NSMenuItem alloc] initWithTitle:infoString action:@selector(nothing) keyEquivalent:@""];
+    
     [settingsMenuItem setTarget:self];
     
     //add items to the menu
+    [menu addItem:self.infoMenuItem];
+    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItem:settingsMenuItem];
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItemWithTitle:@"Exit" action:@selector(terminate:) keyEquivalent:@""];
     
     //set the statusmenuItem menu to the new menu
     self.statusItem.menu = menu;
-    
-    //load the last set zip code (or default if its never been set before
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    self.location.zipCode = [defaults stringForKey:@"zipCode"];
-    self.timeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
-    self.timeUnit = [defaults stringForKey:@"refreshTimeUnit"];
-    
-    [self setTemperatureFromLocation:self.location.zipCode];
 }
 
 //Get location from Google and then get the temperature from DarkSkyAPI
@@ -93,10 +98,18 @@
         NSLog(@"temperature: %d", [temperature intValue]);
         NSLog(@" ");
     
-        self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
-        
+        [self setMenuItemValues: temperature];
         [self handleRefreshTimer];
     }];
+}
+
+- (void) setMenuItemValues: (NSNumber *) temperature {
+    NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
+    
+    //TODO: is there a better way to init menu item without a selector, to get rid of the warning about the bonus selector?
+    self.infoMenuItem.title = infoString;
+    
+    self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
 }
 
 - (void) handleRefreshTimer {
@@ -118,15 +131,37 @@
     }
 }
 
-- (void) tearDown {
-    NSLog(@"Writing zip code, time interval, time unit to NSDefaults");
-    
+- (void) loadDefaults {
+    //load the last set zip code (or default if its never been set before
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.location.zipCode = [defaults stringForKey:@"zipCode"];
+    self.location.city = [defaults stringForKey:@"city"];
+    self.location.stateLong = [defaults stringForKey:@"stateLong"];
+    self.location.stateShort = [defaults stringForKey:@"stateShort"];
+    self.location.countryLong = [defaults stringForKey:@"countryLong"];
+    self.location.countryShort = [defaults stringForKey:@"countryShort"];
+    self.timeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
+    self.timeUnit = [defaults stringForKey:@"refreshTimeUnit"];
+}
+
+- (void) writeDefaults {
     //Write current user values to NSDefaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:self.location.zipCode forKey:@"zipCode"];
+    [defaults setValue:self.location.city forKey:@"city"];
+    [defaults setValue:self.location.stateLong forKey:@"stateLong"];
+    [defaults setValue:self.location.stateShort forKey:@"stateShort"];
+    [defaults setValue:self.location.countryShort forKey:@"countryShort"];
+    [defaults setValue:self.location.countryLong forKey:@"countryLong"];
     [defaults setInteger:self.timeInterval forKey:@"refreshTimeInterval"];
     [defaults setValue:self.timeUnit forKey:@"refreshTimeUnit"];
     [defaults synchronize];
+}
+
+- (void) tearDown {
+    NSLog(@"Writing zip code, time interval, time unit to NSDefaults");
+    
+    [self writeDefaults];
 }
 
 @end

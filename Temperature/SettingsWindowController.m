@@ -66,6 +66,7 @@
     NSString *timeText = self.timeTextField.stringValue;
     
     //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them. also set the new zip code
+    //TODO: move this
     [StatusBarHandler instance].timeInterval = [self convertSecondsToTimeUnit:selectedTimeUnit :timeText];
     [StatusBarHandler instance].timeUnit = selectedTimeUnit;
     [StatusBarHandler instance].location.zipCode = zipCode;
