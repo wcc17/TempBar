@@ -51,14 +51,17 @@
 - (void) initializeMenu {
     NSMenu *menu = [[NSMenu alloc] init];
     NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:@selector(openSettings) keyEquivalent:@""];
+    NSMenuItem *updateMenuItem = [[NSMenuItem alloc] initWithTitle:@"Update" action:@selector(executeDarkSkyRequestNoLocation) keyEquivalent:@""];
     
     NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
     self.infoMenuItem = [[NSMenuItem alloc] initWithTitle:infoString action:@selector(nothing) keyEquivalent:@""];
     
     [settingsMenuItem setTarget:self];
+    [updateMenuItem setTarget:self];
     
     //add items to the menu
     [menu addItem:self.infoMenuItem];
+    [menu addItem:updateMenuItem];
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [menu addItem:settingsMenuItem];
     [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
@@ -76,7 +79,7 @@
     }];
 }
 
-//Only called after timer is done running. Will run weather request without giving it a new location
+//Will run weather request without giving it a new location (reuses current zip)
 - (void) executeDarkSkyRequestNoLocation {
     NSLog(@"Time interval passed, starting weather request process");
     [self executeDarkSkyRequest:nil];
