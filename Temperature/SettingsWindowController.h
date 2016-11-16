@@ -7,26 +7,21 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Util.h"
 
 @interface SettingsWindowController : NSWindowController
 
-#define MINUTE_IN_SECONDS (60)
-#define HOUR_IN_SECONDS (3600)
-#define DAY_IN_SECONDS (86400)
-
-@property int timeInterval;
 @property (strong) IBOutlet NSWindow *settingsWindow;
 
+@property int refreshTimeInterval;
 @property (weak) IBOutlet NSTextField *zipCodeTextField;
-@property (weak) IBOutlet NSTextField *timeTextField;
-@property (weak) IBOutlet NSPopUpButton *timeUnitPopUp;
+@property (weak) IBOutlet NSTextField *refreshTimeTextField;
+@property (weak) IBOutlet NSPopUpButton *refreshTimeUnitPopUp;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 
 - (void)adjustWindowPosition;
-- (int)convertSecondsToTimeUnit: (NSString*)selectedTimeUnit :(NSString*) timeText;
-- (int)getSecondsFromTimeUnit:(NSString *)selectedTimeUnit :(int) time;
 
 @end

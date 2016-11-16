@@ -7,11 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "StatusBarHandler.h"
+#import "StatusBarController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 @property (weak) IBOutlet NSView *view;
+
+- (void) fileNotifications;
+- (void) receiveWakeNote: (NSNotification*) note;
 
 @end
 

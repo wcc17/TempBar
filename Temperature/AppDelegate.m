@@ -28,15 +28,37 @@
     
     //Initialize the status menu object
     [self initializeStatusMenu];
+    
+    [self fileNotifications];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
-    [[StatusBarHandler instance] tearDown];
+    [[StatusBarController instance] tearDown];
 }
 
 - (void)initializeStatusMenu {
-    [[StatusBarHandler instance] initialize];
+    [[StatusBarController instance] initialize];
+}
+
+- (void) receiveWakeNote: (NSNotification*) note
+{
+    NSLog(@"receiveWakeNote: %@", [note name]);
+    [[StatusBarController instance] handleWakeNotification];
+}
+
+- (void) fileNotifications
+{
+    //These notifications are filed on NSWorkspace's notification center, not the default
+    // notification center. You will not receive sleep/wake notifications if you file
+    //with the default notification center.
+//    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver: self
+//                                                           selector: @selector(receiveSleepNote:)
+//                                                               name: NSWorkspaceWillSleepNotification object: NULL];
+    
+    [[[NSWorkspace sharedWorkspace] notificationCenter] addObserver: self
+                                                           selector: @selector(receiveWakeNote:)
+                                                               name: NSWorkspaceDidWakeNotification object: NULL];
 }
 
 @end

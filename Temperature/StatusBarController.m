@@ -1,21 +1,21 @@
 //
-//  StatusBarHandler.m
+//  StatusBarController.m
 //  Temperature
 //
 //  Created by Christian Curry on 10/25/16.
 //  Copyright © 2016 Christian Curry. All rights reserved.
 //
 
-#import "StatusBarHandler.h"
+#import "StatusBarController.h"
 
-@implementation StatusBarHandler
+@implementation StatusBarController
 
-+ (StatusBarHandler *) instance {
-    static StatusBarHandler *sharedInstance = nil;
++ (StatusBarController *) instance {
+    static StatusBarController *sharedInstance = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[StatusBarHandler alloc] init];
+        sharedInstance = [[StatusBarController alloc] init];
     });
     
     return sharedInstance;
@@ -108,14 +108,13 @@
 
 - (void) setMenuItemValues: (NSNumber *) temperature {
     NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
-    
-    //TODO: is there a better way to init menu item without a selector, to get rid of the warning about the bonus selector?
     self.infoMenuItem.title = infoString;
-    
     self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
 }
 
 - (void) handleRefreshTimer {
+    NSLog(@"Resetting the refresh timer");
+    
     //if refreshTimer is nil, we're either just starting up the application or no time interval (0) was set
     if(self.refreshTimer != nil) {
         //timer has already triggered temperature request. just resetting to prepare for a new timer to start
@@ -123,14 +122,29 @@
         self.refreshTimer = nil;
     }
     
-    if(self.timeInterval > 0) {
+    if(self.refreshTimeInterval > 0) {
         //making a new timer for each request so that the temperature refreshes later
-        self.refreshTimer = [NSTimer timerWithTimeInterval:self.timeInterval
+        self.refreshTimer = [NSTimer timerWithTimeInterval:self.refreshTimeInterval
                                                     target:self
                                                   selector:@selector(executeDarkSkyRequestNoLocation)
                                                   userInfo:nil
                                                    repeats:NO];
         [[NSRunLoop mainRunLoop] addTimer:self.refreshTimer forMode:NSDefaultRunLoopMode];
+    }
+}
+
+- (void) handleWakeNotification {
+    NSLog(@"Handling wake notification in StatusBarController");
+    
+    NSDate *now = [NSDate date];
+    
+    //NSLog(@"Now: %@", now);
+    //NSLog(@"Fire Date: %@", self.refreshTimer.fireDate);
+    
+    if( [now isGreaterThan: self.refreshTimer.fireDate]) {
+        NSLog(@"Firing refresh timer after sleeping for more than the refresh time interval");
+        [self.refreshTimer fire];
+        [self handleRefreshTimer];
     }
 }
 
@@ -143,8 +157,9 @@
     self.location.stateShort = [defaults stringForKey:@"stateShort"];
     self.location.countryLong = [defaults stringForKey:@"countryLong"];
     self.location.countryShort = [defaults stringForKey:@"countryShort"];
-    self.timeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
-    self.timeUnit = [defaults stringForKey:@"refreshTimeUnit"];
+    self.refreshTimeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
+    self.refreshTimeUnit = [defaults stringForKey:@"refreshTimeUnit"];
+    NSLog(@"");
 }
 
 - (void) writeDefaults {
@@ -156,9 +171,10 @@
     [defaults setValue:self.location.stateShort forKey:@"stateShort"];
     [defaults setValue:self.location.countryShort forKey:@"countryShort"];
     [defaults setValue:self.location.countryLong forKey:@"countryLong"];
-    [defaults setInteger:self.timeInterval forKey:@"refreshTimeInterval"];
-    [defaults setValue:self.timeUnit forKey:@"refreshTimeUnit"];
+    [defaults setInteger:self.refreshTimeInterval forKey:@"refreshTimeInterval"];
+    [defaults setValue:self.refreshTimeUnit forKey:@"refreshTimeUnit"];
     [defaults synchronize];
+    
 }
 
 - (void) tearDown {

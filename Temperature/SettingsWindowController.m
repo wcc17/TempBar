@@ -7,7 +7,7 @@
 //
 
 #import "SettingsWindowController.h"
-#import "StatusBarHandler.h"
+#import "StatusBarController.h"
 
 @interface SettingsWindowController ()
 
@@ -23,25 +23,25 @@
     [self adjustWindowPosition];
     
     //Initialize Pop Up button for units of time
-    [self.timeUnitPopUp removeAllItems];
-    [self.timeUnitPopUp addItemsWithTitles:@[ @"Second(s)", @"Minute(s)", @"Hour(s)", @"Day(s)" ]];
+    [self.refreshTimeUnitPopUp removeAllItems];
+    [self.refreshTimeUnitPopUp addItemsWithTitles:@[ @"Second(s)", @"Minute(s)", @"Hour(s)", @"Day(s)" ]];
     
-    //Get zip code, time interval, and units of time from StatusBarHandler
-    NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarHandler instance].location.zipCode;
-    int timeIntervalFromStatusBar = [StatusBarHandler instance].timeInterval;
-    NSString *timeUnitFromStatusBar = [StatusBarHandler instance].timeUnit;
+    //Get zip code, time interval, and units of time from StatusBarController
+    NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarController instance].location.zipCode;
+    int timeIntervalFromStatusBar = [StatusBarController instance].refreshTimeInterval;
+    NSString *timeUnitFromStatusBar = [StatusBarController instance].refreshTimeUnit;
     
     
     //set the zip code
     [self.zipCodeTextField setStringValue:zipCodeFromStatusBar];
     
     //set the unit of time
-    NSInteger timeUnitIndex = [self.timeUnitPopUp indexOfItemWithTitle:timeUnitFromStatusBar];
-    [self.timeUnitPopUp selectItemAtIndex: (int)timeUnitIndex];
+    NSInteger timeUnitIndex = [self.refreshTimeUnitPopUp indexOfItemWithTitle:timeUnitFromStatusBar];
+    [self.refreshTimeUnitPopUp selectItemAtIndex: (int)timeUnitIndex];
     
     //set the refresh time interval
-    int refreshTime = [self getSecondsFromTimeUnit: [self.timeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
-    [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
+    int refreshTime = [Util getSecondsFromTimeUnit: [self.refreshTimeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
+    [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
 }
 
 - (void) adjustWindowPosition {
@@ -55,63 +55,29 @@
 }
 
 - (IBAction)onTimeStepper:(NSStepper *)sender {
-    self.timeInterval = [self.timeTextField intValue];
-    self.timeInterval++;
-    [self.timeTextField setStringValue:[NSString stringWithFormat:@"%d", self.timeInterval]];
+    self.refreshTimeInterval = [self.refreshTimeTextField intValue];
+    self.refreshTimeInterval++;
+    [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", self.refreshTimeInterval]];
 }
 
 - (IBAction)onConfirmClick:(NSButton *)sender {
     NSString *zipCode = self.zipCodeTextField.stringValue;
-    NSString *selectedTimeUnit = [self.timeUnitPopUp titleOfSelectedItem];
-    NSString *timeText = self.timeTextField.stringValue;
+    NSString *selectedTimeUnit = [self.refreshTimeUnitPopUp titleOfSelectedItem];
+    NSString *timeText = self.refreshTimeTextField.stringValue;
     
-    //set the amount of time and the time unit in StatusBarHandler to save the values and reuse them. also set the new zip code
-    //TODO: move this
-    [StatusBarHandler instance].timeInterval = [self convertSecondsToTimeUnit:selectedTimeUnit :timeText];
-    [StatusBarHandler instance].timeUnit = selectedTimeUnit;
-    [StatusBarHandler instance].location.zipCode = zipCode;
+    //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
+    //TODO: move this to a method in StatusBarController
+    [StatusBarController instance].refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
+    [StatusBarController instance].refreshTimeUnit = selectedTimeUnit;
+    [StatusBarController instance].location.zipCode = zipCode;
     
     //go ahead and refresh the temperature based on the new information set in this menu
-    [[StatusBarHandler instance] setTemperatureFromLocation: zipCode];
+    [[StatusBarController instance] setTemperatureFromLocation: zipCode];
     [self.settingsWindow close];
 }
 
 - (IBAction)onCancelClick:(NSButton *)sender {
     [self.settingsWindow close];
-}
-
-- (int) convertSecondsToTimeUnit:(NSString *)selectedTimeUnit :(NSString *) timeText {
-    int refreshTime = [timeText intValue];
-    
-    //need to convert unit to seconds
-    if([selectedTimeUnit isEqual:@"Minute(s)"]) {
-        refreshTime *= MINUTE_IN_SECONDS;
-    } else if([selectedTimeUnit isEqual:@"Hour(s)"]) {
-        refreshTime *= HOUR_IN_SECONDS;
-    } else if([selectedTimeUnit isEqual:@"Day(s)"]) {
-        refreshTime *= DAY_IN_SECONDS;
-    }
-    
-    NSLog(@"Refresh time: %d", refreshTime);
-    
-    return refreshTime;
-}
-
-- (int) getSecondsFromTimeUnit:(NSString *)selectedTimeUnit :(int) time {
-    int refreshTime = time;
-    
-    //need to convert unit to seconds
-    if([selectedTimeUnit isEqual:@"Minute(s)"]) {
-        refreshTime /= MINUTE_IN_SECONDS;
-    } else if([selectedTimeUnit isEqual:@"Hour(s)"]) {
-        refreshTime /= HOUR_IN_SECONDS;
-    } else if([selectedTimeUnit isEqual:@"Day(s)"]) {
-        refreshTime /= DAY_IN_SECONDS;
-    }
-    
-    NSLog(@"Refresh time: %d", refreshTime);
-    
-    return refreshTime;
 }
 
 @end
