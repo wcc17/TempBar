@@ -14,9 +14,7 @@
 
 @interface StatusBarController : NSObject
 
-@property (strong, nonatomic) NSStatusItem *statusItem;
 @property (strong, nonatomic) SettingsWindowController *settingsWindowController;
-@property (strong, nonatomic) NSMenuItem *infoMenuItem;
 
 @property (strong, nonatomic) NSTimer *refreshTimer;
 @property (strong, nonatomic) Location *location;

@@ -30,45 +30,17 @@
 }
 
 - (void) initialize {
-    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-    
-    // The text that will be shown in the menu bar if no temperature is set yet
-    self.statusItem.title = @"--°";
-    
-    // The image gets a blue background when the item is selected
-    self.statusItem.highlightMode = YES;
     
     //initialize the location object
     self.location = [[Location alloc] init];
     [self loadDefaults];
     
     //allocate menu and settings menu item
-    [self initializeMenu];
+    self.statusBarMenu = [[StatusBarMenu alloc] init];
+    [self.statusBarMenu initialize]; //TODO: override default init method??
+    [self.statusBarMenu initializeMenuItems: self.location openSettingsWindowSelector:@"openSettings" executeDarkSkyRequestSelector:@"executeDarkSkyRequestNoLocation" statusBarController: self];
     
     [self setTemperatureFromLocation:self.location.zipCode];
-}
-
-- (void) initializeMenu {
-    NSMenu *menu = [[NSMenu alloc] init];
-    NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:@selector(openSettings) keyEquivalent:@""];
-    NSMenuItem *updateMenuItem = [[NSMenuItem alloc] initWithTitle:@"Update" action:@selector(executeDarkSkyRequestNoLocation) keyEquivalent:@""];
-    
-    NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
-    self.infoMenuItem = [[NSMenuItem alloc] initWithTitle:infoString action:@selector(nothing) keyEquivalent:@""];
-    
-    [settingsMenuItem setTarget:self];
-    [updateMenuItem setTarget:self];
-    
-    //add items to the menu
-    [menu addItem:self.infoMenuItem];
-    [menu addItem:updateMenuItem];
-    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
-    [menu addItem:settingsMenuItem];
-    [menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
-    [menu addItemWithTitle:@"Exit" action:@selector(terminate:) keyEquivalent:@""];
-    
-    //set the statusmenuItem menu to the new menu
-    self.statusItem.menu = menu;
 }
 
 //Get location from Google and then get the temperature from DarkSkyAPI
@@ -101,15 +73,9 @@
         NSLog(@"temperature: %d", [temperature intValue]);
         NSLog(@" ");
     
-        [self setMenuItemValues: temperature];
+        [self.statusBarMenu setMenuItemValues:self.location temperature: temperature];
         [self handleRefreshTimer];
     }];
-}
-
-- (void) setMenuItemValues: (NSNumber *) temperature {
-    NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", self.location.city, self.location.stateShort, self.location.countryShort, self.location.zipCode];
-    self.infoMenuItem.title = infoString;
-    self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
 }
 
 - (void) handleRefreshTimer {

@@ -9,13 +9,23 @@
 #import <Cocoa/Cocoa.h>
 #import "Location.h"
 
+//needed in order to set the menu item's targets to the StatusBarController
+@class StatusBarController;
+
 @interface StatusBarMenu : NSObject
 
 @property (strong, nonatomic) NSMenu *menu;
+@property (strong, nonatomic) NSStatusItem *statusItem;
 
 #define INFO_MENU_ITEM_TAG (1)
 
-- (void) initializeMenu: (Location *) location openSettingsWindowSelector:(NSString *) openSettingsWindowSelector executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector;
+- (void) initialize;
+
+- (void) initializeMenuItems: (Location *) location
+    openSettingsWindowSelector:(NSString *) openSettingsWindowSelector
+    executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector
+    statusBarController: (StatusBarController *) statusBarController;
+
 - (void) setMenuItemValues: (Location *) location temperature: (NSNumber *) temperature;
 
 @end

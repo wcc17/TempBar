@@ -10,15 +10,29 @@
 
 @implementation StatusBarMenu
 
-- (void) initializeMenu: (Location *) location openSettingsWindowSelector:(NSString *) openSettingsWindowSelector executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector {
+- (void) initialize {
+    self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
+    
+    // The text that will be shown in the menu bar if no temperature is set yet
+    self.statusItem.title = @"--°";
+    
+    // The image gets a blue background when the item is selected
+    self.statusItem.highlightMode = YES;
+}
+
+- (void) initializeMenuItems: (Location *) location
+                        openSettingsWindowSelector:(NSString *) openSettingsWindowSelector
+                        executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector
+                        statusBarController: (StatusBarController *) statusBarController {
     NSString *infoString = [NSString stringWithFormat:@"%@, %@ %@ %@", location.city, location.stateShort, location.countryShort, location.zipCode];
     
     self.menu = [[NSMenu alloc] init];
     NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:NSSelectorFromString(openSettingsWindowSelector) keyEquivalent:@""];
     NSMenuItem *updateMenuItem = [[NSMenuItem alloc] initWithTitle:@"Update" action:NSSelectorFromString(executeDarkSkyRequestSelector) keyEquivalent:@""];
     NSMenuItem *infoMenuItem = [[NSMenuItem alloc] initWithTitle:infoString action:nil keyEquivalent:@""];
-    [settingsMenuItem setTarget: self];
-    [updateMenuItem setTarget: self];
+    
+    [settingsMenuItem setTarget: statusBarController];
+    [updateMenuItem setTarget: statusBarController];
     
     //adding tag to infoMenuItem so that it can be referenced easily and updated later
     [infoMenuItem setTag:INFO_MENU_ITEM_TAG];
@@ -30,6 +44,8 @@
     [self.menu addItem:settingsMenuItem];
     [self.menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [self.menu addItemWithTitle:@"Exit" action:@selector(terminate:) keyEquivalent:@""];
+    
+    self.statusItem.menu = self.menu;
 }
 
 - (void) setMenuItemValues: (Location *) location temperature: (NSNumber *) temperature {
@@ -37,9 +53,8 @@
     
     NSMenuItem *infoMenuItem = [self.menu itemWithTag: INFO_MENU_ITEM_TAG];
     [infoMenuItem setTitle: infoString];
-                                
-    [self.menu setTitle: [NSString stringWithFormat:@"%@°", [temperature stringValue]]];
-    NSLog(@"");
+    
+    self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
 }
 
 @end
