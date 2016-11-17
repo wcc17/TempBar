@@ -10,6 +10,16 @@
 
 @implementation StatusBarMenu
 
+- (id) init {
+    self = [super init];
+    
+    if(self) {
+        [self initialize];
+    }
+    
+    return self;
+}
+
 - (void) initialize {
     self.statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
     

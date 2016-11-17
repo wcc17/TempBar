@@ -37,7 +37,6 @@
     
     //allocate menu and settings menu item
     self.statusBarMenu = [[StatusBarMenu alloc] init];
-    [self.statusBarMenu initialize]; //TODO: override default init method??
     [self.statusBarMenu initializeMenuItems: self.location openSettingsWindowSelector:@"openSettings" executeDarkSkyRequestSelector:@"executeDarkSkyRequestNoLocation" statusBarController: self];
     
     [self setTemperatureFromLocation:self.location.zipCode];
@@ -60,7 +59,6 @@
 //Makes a new weather request and sets the status bar temperature. Restarts the timer
 - (void) executeDarkSkyRequest: (Location *) loc {
     if(loc != nil) {
-        //self.location = nil; not sure if i need to worry about this because of ARC
         self.location = loc;
         
         NSLog(@"Latitude: %g", self.location.latitude);
