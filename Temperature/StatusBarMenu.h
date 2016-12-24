@@ -17,7 +17,9 @@
 @property (strong, nonatomic) NSMenu *menu;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 
-#define INFO_MENU_ITEM_TAG (1)
+//TODO: most definitley need better names for these
+#define INFO_MENU_ITEM_1_TAG (1)
+#define INFO_MENU_ITEM_2_TAG (2)
 
 - (void) initialize;
 
