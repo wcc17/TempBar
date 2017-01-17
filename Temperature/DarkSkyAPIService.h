@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Location.h"
+#import "Weather.h"
 
 @interface DarkSkyAPIService : NSObject
 
-+ (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(NSNumber *temperature)) completionHandler;
-+ (NSNumber *) handleWeatherResponse:(NSData *) data;
++ (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(Weather* weather)) completionHandler;
++ (Weather *) handleWeatherResponse:(NSData *) data;
 
 @end

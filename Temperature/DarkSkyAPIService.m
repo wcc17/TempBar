@@ -10,7 +10,7 @@
 
 @implementation DarkSkyAPIService
 
-+ (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(NSNumber *temperature)) completionHandler {
++ (void) makeWeatherRequest:(Location *) location completionHandler:(void(^)(Weather* weather)) completionHandler {
     
     //TODO: get out of here
     NSString *DARKSKY_API_KEY = @"fb30f9d966ec63fc374f93f2b5816b94";    //gmail email
@@ -33,21 +33,34 @@
         //TODO: anything useful in response that isnt in data?
         NSLog(@"Dark sky request made");
         
-        NSNumber *temperature = [self handleWeatherResponse: data];
-        completionHandler(temperature);
+        Weather *weather = [self handleWeatherResponse: data];
+        completionHandler(weather);
     }] resume];
 }
 
-+ (NSNumber *) handleWeatherResponse:(NSData *) data {
++ (Weather *) handleWeatherResponse:(NSData *) data {
     NSLog(@"handling weather response");
     
     NSError *error = nil;
     NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     if(error == nil) {
         NSDictionary *currentlyDict = [root objectForKey:@"currently"];
-        NSNumber *temperature = [NSNumber numberWithInt:[[currentlyDict objectForKey:@"temperature"] intValue]];
+        NSNumber* temperature = [NSNumber numberWithInt:[[currentlyDict objectForKey:@"temperature"] intValue]];
+        NSString* weatherStatus = [currentlyDict objectForKey:@"summary"];
         
-        return temperature;
+        NSDictionary* dailyDict = [root objectForKey:@"daily"];
+        NSArray* dataArray = [dailyDict objectForKey:@"data"];
+        NSDictionary* todayDict = dataArray[0];
+        NSNumber* highTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMax"] intValue]];
+        NSNumber* lowTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMin"] intValue]];
+        
+        Weather* weather = [[Weather alloc] init];
+        weather.currentTemperature = temperature;
+        weather.highTemperature = highTemperature;
+        weather.lowTemperature = lowTemperature;
+        weather.status = weatherStatus;
+        
+        return weather;
     }
     
     return nil;

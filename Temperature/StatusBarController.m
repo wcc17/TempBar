@@ -66,12 +66,15 @@
     }
     
     //execute darksky request and handle the data thats returned
-    [DarkSkyAPIService makeWeatherRequest: self.location completionHandler:^(NSNumber *temperature) {
+    [DarkSkyAPIService makeWeatherRequest: self.location completionHandler:^(Weather* weather) {
         NSLog(@"recieved dark sky api response");
-        NSLog(@"temperature: %d", [temperature intValue]);
+        NSLog(@"temperature: %@", weather.currentTemperature);
+        NSLog(@"high temperature: %@", weather.highTemperature);
+        NSLog(@"low temperature: %@", weather.lowTemperature);
+        NSLog(@"current weather status: %@", weather.status);
         NSLog(@" ");
     
-        [self.statusBarMenu setMenuItemValues:self.location temperature: temperature];
+        [self.statusBarMenu setMenuItemValues:self.location weather: weather];
         [self handleRefreshTimer];
     }];
 }

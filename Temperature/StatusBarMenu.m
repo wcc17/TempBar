@@ -10,6 +10,11 @@
 
 @implementation StatusBarMenu
 
+NSString *const LOCATION_STRING_FORMAT = @"%@, %@ %@ %@";
+NSString *const WEATHER_INFO_STRING_FORMAT = @"H: %@ L: %@";
+NSString *const WEATHER_STATUS_STRING_FORMAT = @"Currently: %@";
+NSString *const TEMPERATURE_STRING_FORMAT = @"%@°";
+
 - (id) init {
     self = [super init];
     
@@ -34,32 +39,49 @@
                         openSettingsWindowSelector:(NSString *) openSettingsWindowSelector
                         executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector
                         statusBarController: (StatusBarController *) statusBarController {
-    //TODO: placeholder text for high and low temperature. Need to make Weather object that holds a bunch of weather info I might need from DarkSky
-    int highTemperature = 50;
-    int lowTemperature = 30;
     
-    //TODO: everlything needs a better name than just infoString1 with the number at the end.
     //TODO: Could probably use a constant for the stringWithFormat values
-    NSString *infoString1 = [NSString stringWithFormat:@"%@, %@ %@ %@", location.city, location.stateShort, location.countryShort, location.zipCode];
-    NSString *infoString2 = [NSString stringWithFormat:@"H: %d   L: %d", highTemperature, lowTemperature];
+    NSString *locationString = [NSString stringWithFormat: LOCATION_STRING_FORMAT, location.city, location.stateShort, location.countryShort, location.zipCode];
+    NSString *weatherInfoString = [NSString stringWithFormat: WEATHER_INFO_STRING_FORMAT, @"--", @"--"];
+    NSString *weatherStatusString = [NSString stringWithFormat: WEATHER_STATUS_STRING_FORMAT, @"--"];
     
     self.menu = [[NSMenu alloc] init];
-    NSMenuItem *settingsMenuItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:NSSelectorFromString(openSettingsWindowSelector) keyEquivalent:@""];
-    NSMenuItem *updateMenuItem = [[NSMenuItem alloc] initWithTitle:@"Update" action:NSSelectorFromString(executeDarkSkyRequestSelector) keyEquivalent:@""];
-    NSMenuItem *infoMenuItem1 = [[NSMenuItem alloc] initWithTitle:infoString1 action:nil keyEquivalent:@""];
-    NSMenuItem *infoMenuItem2 = [[NSMenuItem alloc] initWithTitle:infoString2 action:nil keyEquivalent:@""];
+    NSMenuItem *settingsMenuItem = [[NSMenuItem alloc]
+                                    initWithTitle:@"Settings"
+                                    action:NSSelectorFromString(openSettingsWindowSelector)
+                                    keyEquivalent:@""];
+    
+    NSMenuItem *updateMenuItem = [[NSMenuItem alloc]
+                                  initWithTitle:@"Update"
+                                  action:NSSelectorFromString(executeDarkSkyRequestSelector)
+                                  keyEquivalent:@""];
+    
+    NSMenuItem *locationMenuItem = [[NSMenuItem alloc]
+                                    initWithTitle:locationString
+                                    action:nil
+                                    keyEquivalent:@""];
+    
+    NSMenuItem *weatherInfoMenuItem = [[NSMenuItem alloc]
+                                       initWithTitle:weatherInfoString
+                                       action:nil
+                                       keyEquivalent:@""];
+    
+    NSMenuItem *weatherStatusMenuItem = [[NSMenuItem alloc]
+                                          initWithTitle:weatherStatusString
+                                          action:nil
+                                          keyEquivalent:@""];
     
     [settingsMenuItem setTarget: statusBarController];
     [updateMenuItem setTarget: statusBarController];
     
-    //adding tag to infoMenuItem so that it can be referenced easily and updated later
-    //TODO: these tags need better names now
-    [infoMenuItem1 setTag:INFO_MENU_ITEM_1_TAG];
-    [infoMenuItem2 setTag:INFO_MENU_ITEM_2_TAG];
+    [locationMenuItem setTag:LOCATION_MENU_ITEM_TAG];
+    [weatherInfoMenuItem setTag:WEATHER_INFO_MENU_ITEM_TAG];
+    [weatherStatusMenuItem setTag:WEATHER_STATUS_MENU_ITEM_TAG];
     
     //add items to the menu
-    [self.menu addItem:infoMenuItem1];
-    [self.menu addItem:infoMenuItem2];
+    [self.menu addItem:locationMenuItem];
+    [self.menu addItem:weatherStatusMenuItem];
+    [self.menu addItem:weatherInfoMenuItem];
     [self.menu addItem:[NSMenuItem separatorItem]]; // A thin grey line
     [self.menu addItem:updateMenuItem];
     [self.menu addItem:settingsMenuItem];
@@ -69,21 +91,33 @@
     self.statusItem.menu = self.menu;
 }
 
-- (void) setMenuItemValues: (Location *) location temperature: (NSNumber *) temperature {
-    NSString *infoString1 = [NSString stringWithFormat:@"%@, %@ %@ %@", location.city, location.stateShort, location.countryShort, location.zipCode];
+- (void) setMenuItemValues: (Location *) location weather: (Weather *) weather {
+    NSString *locationString = [NSString
+                                stringWithFormat: LOCATION_STRING_FORMAT,
+                                location.city,
+                                location.stateShort,
+                                location.countryShort,
+                                location.zipCode];
+    NSMenuItem *locationMenuItem = [self.menu itemWithTag: LOCATION_MENU_ITEM_TAG];
+    [locationMenuItem setTitle: locationString];
     
-    NSMenuItem *infoMenuItem1 = [self.menu itemWithTag: INFO_MENU_ITEM_1_TAG];
-    [infoMenuItem1 setTitle: infoString1];
+    NSString *weatherInfoString = [NSString
+                                   stringWithFormat: WEATHER_INFO_STRING_FORMAT,
+                                   weather.highTemperature,
+                                   weather.lowTemperature];
+    NSMenuItem *weatherInfoMenuItem = [self.menu itemWithTag: WEATHER_INFO_MENU_ITEM_TAG];
+    [weatherInfoMenuItem setTitle: weatherInfoString];
     
-    //TODO: placeholder text for high and low temperature. Need to make Weather object that holds a bunch of weather info I might need from DarkSky
-    int highTemperature = 50;
-    int lowTemperature = 30;
-    NSString *infoString2 = [NSString stringWithFormat:@"H: %d L: %d", highTemperature, lowTemperature];
+    NSString *weatherStatusString = [NSString
+                                     stringWithFormat: WEATHER_STATUS_STRING_FORMAT,
+                                     weather.status];
+    NSMenuItem *weatherStatusMenuItem = [self.menu itemWithTag: WEATHER_STATUS_MENU_ITEM_TAG];
+    [weatherStatusMenuItem setTitle: weatherStatusString];
     
-    NSMenuItem *infoMenuItem2 = [self.menu itemWithTag: INFO_MENU_ITEM_2_TAG];
-    [infoMenuItem2 setTitle: infoString2];
-    
-    self.statusItem.title = [NSString stringWithFormat:@"%@°", [temperature stringValue]];
+    //set temperature in menu bar
+    self.statusItem.title = [NSString
+                             stringWithFormat: TEMPERATURE_STRING_FORMAT,
+                             [weather.currentTemperature stringValue]];
 }
 
 @end

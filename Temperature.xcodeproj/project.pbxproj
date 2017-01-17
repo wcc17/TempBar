@@ -12,6 +12,7 @@
 		12215FE51DC04FF70022E13D /* StatusBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12215FE41DC04FF70022E13D /* StatusBarController.m */; };
 		123AFB711DB6EC0A00EE3D40 /* DarkSkyAPIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 123AFB701DB6EC0A00EE3D40 /* DarkSkyAPIService.m */; };
 		123AFB741DB6EC6500EE3D40 /* GoogleGeoAPIService.m in Sources */ = {isa = PBXBuildFile; fileRef = 123AFB731DB6EC6500EE3D40 /* GoogleGeoAPIService.m */; };
+		128CEDBB1E2E822A005111FB /* Weather.m in Sources */ = {isa = PBXBuildFile; fileRef = 128CEDBA1E2E822A005111FB /* Weather.m */; };
 		129DD0061DCBD0D700A24992 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 129DD0051DCBD0D700A24992 /* Location.m */; };
 		129DD0091DDBAFFB00A24992 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 129DD0081DDBAFFB00A24992 /* Util.m */; };
 		129DD00C1DDC06C500A24992 /* StatusBarMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 129DD00B1DDC06C500A24992 /* StatusBarMenu.m */; };
@@ -52,6 +53,8 @@
 		123AFB731DB6EC6500EE3D40 /* GoogleGeoAPIService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleGeoAPIService.m; sourceTree = "<group>"; };
 		123AFB751DB7010E00EE3D40 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		127F7B311DC917D70083FEC5 /* Temperature.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Temperature.entitlements; sourceTree = "<group>"; };
+		128CEDB91E2E822A005111FB /* Weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weather.h; sourceTree = "<group>"; };
+		128CEDBA1E2E822A005111FB /* Weather.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Weather.m; sourceTree = "<group>"; };
 		129DD0051DCBD0D700A24992 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		129DD0071DDBAFFB00A24992 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		129DD0081DDBAFFB00A24992 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 				129DD0081DDBAFFB00A24992 /* Util.m */,
 				129DD00A1DDC06C500A24992 /* StatusBarMenu.h */,
 				129DD00B1DDC06C500A24992 /* StatusBarMenu.m */,
+				128CEDB91E2E822A005111FB /* Weather.h */,
+				128CEDBA1E2E822A005111FB /* Weather.m */,
 			);
 			path = Temperature;
 			sourceTree = "<group>";
@@ -317,6 +322,7 @@
 				129DD0061DCBD0D700A24992 /* Location.m in Sources */,
 				123AFB711DB6EC0A00EE3D40 /* DarkSkyAPIService.m in Sources */,
 				12215FE51DC04FF70022E13D /* StatusBarController.m in Sources */,
+				128CEDBB1E2E822A005111FB /* Weather.m in Sources */,
 				12DBD7571D9803C0001EFE98 /* AppDelegate.m in Sources */,
 				12215FDE1DC0477C0022E13D /* SettingsWindowController.m in Sources */,
 				123AFB741DB6EC6500EE3D40 /* GoogleGeoAPIService.m in Sources */,
