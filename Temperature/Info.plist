@@ -30,7 +30,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-    <key>LSUIElement</key>
-    <true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To retrieve user&apos;s zip code when the location button is clicked in the settings menu.</string>
+	<key>LSUIElement</key>
+	<true/>
 </dict>
 </plist>
