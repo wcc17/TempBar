@@ -31,7 +31,6 @@
     int timeIntervalFromStatusBar = [StatusBarController instance].refreshTimeInterval;
     NSString *timeUnitFromStatusBar = [StatusBarController instance].refreshTimeUnit;
     
-    
     //set the zip code
     [self.zipCodeTextField setStringValue:zipCodeFromStatusBar];
     
@@ -64,6 +63,9 @@
     NSLog(@"location button clicked");
     
     [self initializeLocationServices];
+}
+
+- (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender {
 }
 
 - (IBAction)onConfirmClick:(NSButton *)sender {
@@ -106,7 +108,9 @@
     // Set a movement threshold for new events.
     self.locationManager.distanceFilter = 500; // meters
     
+    [self.locationButton setHidden: YES];
     [self.locationManager startUpdatingLocation];
+    [self.locationProgressIndicator startAnimation: self];
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.
@@ -130,14 +134,25 @@
     CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error)
      {
+         NSString* zipCode = nil;
          if (!error) {
              CLPlacemark *placemark = [placemarks objectAtIndex:0];
-             NSString *zipCode = [[NSString alloc]initWithString:placemark.postalCode];
+             zipCode = [[NSString alloc]initWithString:placemark.postalCode];
              NSLog(@"%@",zipCode);
          }
          else {
              NSLog(@"Geocode failed with error %@", error); // Error handling must required
          }
+         
+         //TODO: could possibly put this in its own completionHandler to seperate Location stuff from SettingsWindow
+         if(zipCode != nil) {
+            [self.zipCodeTextField setStringValue:zipCode];
+         }
+         
+         //TODO: should be checking if user wants location to automatically update when they move a certain distance
+         [self.locationManager stopUpdatingLocation];
+         [self.locationButton setHidden: NO];
+         [self.locationProgressIndicator stopAnimation: self];
      }];
 }
 

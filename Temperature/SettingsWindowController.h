@@ -19,11 +19,15 @@
 @property (weak) IBOutlet NSTextField *zipCodeTextField;
 @property (weak) IBOutlet NSTextField *refreshTimeTextField;
 @property (weak) IBOutlet NSPopUpButton *refreshTimeUnitPopUp;
+@property (weak) IBOutlet NSButton *locationButton;
+@property (weak) IBOutlet NSProgressIndicator *locationProgressIndicator;
+@property (weak) IBOutlet NSButton *autoUpdateLocationCheckBox;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 - (IBAction)onLocationButtonClick:(NSButton *)sender;
+- (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender;
 
 - (void) adjustWindowPosition;
 - (void) initializeLocationServices;
