@@ -80,11 +80,7 @@
     
     [self.locationButton setHidden: NO];
     [self.locationProgressIndicator stopAnimation: self];
-    
-    if([self isAutoUpdateLocation] == NO) {
-        NSLog(@"Stopping location services");
-        [self.locationService stopLocationServices];
-    }
+    [self.locationService stopLocationServices];
     
 }
 
@@ -93,20 +89,10 @@
     NSString *selectedTimeUnit = [self.refreshTimeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.refreshTimeTextField.stringValue;
     
-    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode autoUpdateValue: [self.autoUpdateLocationCheckBox state]];
+    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode];
     //go ahead and refresh the temperature based on the new information set in this menu
     [[StatusBarController instance] setTemperatureFromLocation: zipCode];
     [self.settingsWindow close];
-}
-
-- (BOOL) isAutoUpdateLocation {
-    NSInteger value = [self.autoUpdateLocationCheckBox state];
-    
-    if(value == 1) {
-        return YES;
-    }
-    
-    return NO;
 }
 
 - (IBAction)onCancelClick:(NSButton *)sender {
@@ -115,6 +101,15 @@
 
 @end
 
+//- (BOOL) isAutoUpdateLocation {
+//    NSInteger value = [self.autoUpdateLocationCheckBox state];
+//    
+//    if(value == 1) {
+//        return YES;
+//    }
+//    
+//    return NO;
+//}
 //- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
 //    //disable zip code text field if auto update is turned on
 //    NSInteger autoLocationState = 0;

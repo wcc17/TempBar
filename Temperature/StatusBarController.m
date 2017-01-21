@@ -114,16 +114,11 @@
     }
 }
 
-- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode autoUpdateValue:(NSInteger) autoUpdateValue {
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode{
     //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
     self.refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
     self.refreshTimeUnit = selectedTimeUnit;
     self.location.zipCode = zipCode;
-    if(autoUpdateValue == 0) {
-        self.autoUpdateLocation = NO;
-    } else if(autoUpdateValue == 1) {
-        self.autoUpdateLocation = YES;
-    }
     
     //go ahead and refresh the temperature based on the new information set in this menu
     [self setTemperatureFromLocation: zipCode];

@@ -34,6 +34,6 @@
 - (void) executeDarkSkyRequestNoLocation;
 - (void) handleRefreshTimer;
 - (void) handleWakeNotification;
-- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode autoUpdateValue:(NSInteger) autoUpdateValue;
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode;
 
 @end

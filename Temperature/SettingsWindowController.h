@@ -20,7 +20,6 @@
 @property (weak) IBOutlet NSPopUpButton *refreshTimeUnitPopUp;
 @property (weak) IBOutlet NSButton *locationButton;
 @property (weak) IBOutlet NSProgressIndicator *locationProgressIndicator;
-@property (weak) IBOutlet NSButton *autoUpdateLocationCheckBox;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
