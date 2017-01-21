@@ -30,7 +30,11 @@
 - (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender;
 
 - (void) adjustWindowPosition;
-- (void) initializeLocationServices;
+- (void) startLocationServices;
+- (void) handleZipCode:(NSArray*) placemarks :(NSError*) error;
+- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation;
+
+//delegate method
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations;
 
 @end

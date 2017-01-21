@@ -8,10 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="SettingsWindowController">
             <connections>
-                <outlet property="autoUpdateLocationCheckBox" destination="NT8-eG-Xma" id="cuf-6t-ver"/>
+                <outlet property="autoUpdateLocationCheckBox" destination="NT8-eG-Xma" id="5aZ-wl-Ytp"/>
                 <outlet property="locationButton" destination="8sX-gg-9NP" id="HeD-b3-egS"/>
                 <outlet property="locationProgressIndicator" destination="cwN-P5-AR1" id="uGv-yV-MpY"/>
-                <outlet property="onAutoUpdateLocationCheckBoxClick" destination="NT8-eG-Xma" id="Glg-Kr-5fe"/>
                 <outlet property="refreshTimeTextField" destination="gW0-ce-uEm" id="rfi-AG-Rzb"/>
                 <outlet property="refreshTimeUnitPopUp" destination="nz7-Cn-DOA" id="38T-kR-6mR"/>
                 <outlet property="settingsWindow" destination="QvC-M9-y7g" id="0VP-Rf-8RS"/>
@@ -24,13 +23,13 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="168" height="212"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3008" height="1670"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="168" height="212"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jiq-Is-T76">
-                        <rect key="frame" x="7" y="183" width="60" height="17"/>
+                        <rect key="frame" x="4" y="175" width="60" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Zip Code" id="FGh-vr-BXT">
                             <font key="font" metaFont="system"/>
@@ -39,7 +38,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sV3-bA-b8d">
-                        <rect key="frame" x="9" y="153" width="102" height="22"/>
+                        <rect key="frame" x="6" y="145" width="102" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="4lO-u7-oDT">
                             <font key="font" metaFont="system"/>
@@ -47,34 +46,8 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8sX-gg-9NP">
-                        <rect key="frame" x="113" y="147" width="54" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="location-services-icon" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="A5V-KG-dzw">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="onLocationButtonClick:" target="-2" id="B7q-Oa-0fj"/>
-                        </connections>
-                    </button>
-                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cwN-P5-AR1">
-                        <rect key="frame" x="132" y="157" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </progressIndicator>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NT8-eG-Xma">
-                        <rect key="frame" x="7" y="129" width="154" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Auto Update Location" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="rcX-ua-y7O">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="onAutoUpdateLocationCheckBoxClick:" target="-2" id="Jp8-gc-9Id"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HV9-Kt-omO">
-                        <rect key="frame" x="3" y="13" width="89" height="32"/>
+                        <rect key="frame" x="0.0" y="13" width="89" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Confirm" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ebS-js-RIQ">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -85,7 +58,7 @@
                         </buttonCell>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E9O-FG-h3E">
-                        <rect key="frame" x="7" y="88" width="99" height="17"/>
+                        <rect key="frame" x="4" y="88" width="99" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Refresh Interval" id="Uf1-3Q-ok9">
                             <font key="font" metaFont="system"/>
@@ -94,7 +67,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gW0-ce-uEm">
-                        <rect key="frame" x="9" y="58" width="34" height="22"/>
+                        <rect key="frame" x="6" y="58" width="34" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="syl-pK-ZO2">
                             <font key="font" metaFont="system"/>
@@ -103,7 +76,7 @@
                         </textFieldCell>
                     </textField>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Af-rB-Zrb">
-                        <rect key="frame" x="41" y="55" width="19" height="27"/>
+                        <rect key="frame" x="38" y="55" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="yY9-ke-Ntg"/>
                         <connections>
@@ -111,7 +84,7 @@
                         </connections>
                     </stepper>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wdx-o1-kos">
-                        <rect key="frame" x="89" y="13" width="82" height="32"/>
+                        <rect key="frame" x="86" y="13" width="82" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-Yo-89S">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -125,7 +98,7 @@ Gw
                         </connections>
                     </button>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nz7-Cn-DOA">
-                        <rect key="frame" x="63" y="55" width="101" height="26"/>
+                        <rect key="frame" x="60" y="55" width="101" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="vmh-bL-aQx" id="j51-YS-1Mz">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -139,9 +112,35 @@ Gw
                             </menu>
                         </popUpButtonCell>
                     </popUpButton>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8sX-gg-9NP">
+                        <rect key="frame" x="110" y="139" width="54" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="location-services-icon" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="A5V-KG-dzw">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="onLocationButtonClick:" target="-2" id="B7q-Oa-0fj"/>
+                        </connections>
+                    </button>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="cwN-P5-AR1">
+                        <rect key="frame" x="129" y="149" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NT8-eG-Xma">
+                        <rect key="frame" x="4" y="118" width="154" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Auto Update Location" bezelStyle="regularSquare" imagePosition="left" inset="2" id="rcX-ua-y7O">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="onAutoUpdateLocationCheckBoxClick:" target="-2" id="Jp8-gc-9Id"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-24" y="132"/>
+            <point key="canvasLocation" x="-372" y="135"/>
         </window>
     </objects>
     <resources>

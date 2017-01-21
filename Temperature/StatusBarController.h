@@ -15,15 +15,12 @@
 @interface StatusBarController : NSObject
 
 @property (strong, nonatomic) SettingsWindowController *settingsWindowController;
-
 @property (strong, nonatomic) NSTimer *refreshTimer;
 @property (strong, nonatomic) Location *location;
-
 @property (strong, nonatomic) StatusBarMenu *statusBarMenu;
-
 @property int refreshTimeInterval;
+@property BOOL autoUpdateLocation;
 @property NSString* refreshTimeUnit;
-
 @property (strong, nonatomic) NSDate *sleepDate;
 
 + (StatusBarController *) instance;
@@ -37,5 +34,6 @@
 - (void) executeDarkSkyRequestNoLocation;
 - (void) handleRefreshTimer;
 - (void) handleWakeNotification;
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode autoUpdateValue:(NSInteger) autoUpdateValue;
 
 @end

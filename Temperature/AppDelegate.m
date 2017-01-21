@@ -23,7 +23,8 @@
                                             @"countryLong": @"United States",
                                             @"countryShort": @"US",
                                             @"refreshTimeInterval": @3600,
-                                            @"refreshTimeUnit": @"Hour(s)" };
+                                            @"refreshTimeUnit": @"Hour(s)",
+                                            @"autoUpdateLocation": @NO };
     [NSUserDefaults.standardUserDefaults registerDefaults:userDefaultsDefaults];
     
     //Initialize the status menu object

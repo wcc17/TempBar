@@ -30,6 +30,7 @@
     NSString *zipCodeFromStatusBar = zipCodeFromStatusBar = [StatusBarController instance].location.zipCode;
     int timeIntervalFromStatusBar = [StatusBarController instance].refreshTimeInterval;
     NSString *timeUnitFromStatusBar = [StatusBarController instance].refreshTimeUnit;
+    BOOL autoUpdateLocation = [StatusBarController instance].autoUpdateLocation;
     
     //set the zip code
     [self.zipCodeTextField setStringValue:zipCodeFromStatusBar];
@@ -41,6 +42,8 @@
     //set the refresh time interval
     int refreshTime = [Util getSecondsFromTimeUnit: [self.refreshTimeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
     [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
+    
+    [self initializeAutoUpdateLocationCheckBox: autoUpdateLocation];
 }
 
 - (void) adjustWindowPosition {
@@ -53,6 +56,19 @@
     [self.settingsWindow setFrame:NSMakeRect(xPos, yPos, NSWidth([self.settingsWindow frame]), NSHeight([self.settingsWindow frame])) display:YES];
 }
 
+- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
+    //disable zip code text field if auto update is turned on
+    NSInteger autoLocationState = 0;
+    if(autoUpdateLocation == YES) {
+        autoLocationState = 1;
+    }
+    [self.autoUpdateLocationCheckBox setState: autoLocationState];
+    
+    //force zip code fields to disable or enable
+    [self onAutoUpdateLocationCheckBoxClick: nil];
+}
+
+//TODO: this only goes up, not down
 - (IBAction)onTimeStepper:(NSStepper *)sender {
     self.refreshTimeInterval = [self.refreshTimeTextField intValue];
     self.refreshTimeInterval++;
@@ -61,11 +77,23 @@
 
 - (IBAction)onLocationButtonClick:(NSButton *)sender {
     NSLog(@"location button clicked");
-    
-    [self initializeLocationServices];
+    [self startLocationServices];
 }
 
 - (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender {
+    NSInteger value = [self.autoUpdateLocationCheckBox state];
+    
+    if(value == 0) {
+        NSLog(@"Auto update disabled"); //Show value on screen
+        [self.locationButton setEnabled:YES];
+        [self.zipCodeTextField setEnabled:YES];
+    } else if(value == 1) {
+        NSLog(@"Auto update enabled"); //Show value on screen
+        [self.locationButton setEnabled:NO];
+        [self.zipCodeTextField setEnabled:NO];
+    } else {
+        NSLog(@"stop it");
+    }
 }
 
 - (IBAction)onConfirmClick:(NSButton *)sender {
@@ -73,12 +101,7 @@
     NSString *selectedTimeUnit = [self.refreshTimeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.refreshTimeTextField.stringValue;
     
-    //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
-    //TODO: move this to a method in StatusBarController
-    [StatusBarController instance].refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
-    [StatusBarController instance].refreshTimeUnit = selectedTimeUnit;
-    [StatusBarController instance].location.zipCode = zipCode;
-    
+    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode autoUpdateValue: [self.autoUpdateLocationCheckBox state]];
     //go ahead and refresh the temperature based on the new information set in this menu
     [[StatusBarController instance] setTemperatureFromLocation: zipCode];
     [self.settingsWindow close];
@@ -88,72 +111,64 @@
     [self.settingsWindow close];
 }
 
-- (void) initializeLocationServices {
-    //STARTING THE STANDARD LOCATION SERVICES
-    
-    // Create the location manager if this object does not
-    // already have one.
+
+
+//TODO: I think I want all of these to be in their own class. the obstacle tonight is updating the zip code text field after it happens
+- (void) startLocationServices {
     if (nil == self.locationManager) {
         self.locationManager = [[CLLocationManager alloc] init];
     }
     
-//    if([CLLocationManager locationServicesEnabled]) {
-//        //even if they're disabled, the program will still prompt if the application tries to use them
-//        //will come back to this
-//    }
-    
-    self.locationManager.delegate = self;
+    self.locationManager.delegate = (id<CLLocationManagerDelegate>) self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
     
     // Set a movement threshold for new events.
-    self.locationManager.distanceFilter = 500; // meters
+    self.locationManager.distanceFilter = 1600; // 1600 meters ~= 1 mile
     
     [self.locationButton setHidden: YES];
-    [self.locationManager startUpdatingLocation];
     [self.locationProgressIndicator startAnimation: self];
+    
+    [self.locationManager startUpdatingLocation];
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.
-- (void) locationManager:(CLLocationManager *)manager
-      didUpdateLocations:(NSArray *)locations {
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
     NSDate* eventDate = location.timestamp;
     NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (abs(howRecent) < 15.0) {
-        // If the event is recent, do something with it.
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              location.coordinate.latitude,
-              location.coordinate.longitude);
+    
+    // If the event is recent, do something with it.
+    if (fabs(howRecent) < 15.0) {
+        //TODO: need to check if user wants to keep updating location in the background when they move around
+        [self.locationManager stopUpdatingLocation];
+        
+        CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
+        [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            [self handleZipCode: placemarks :error];
+        }];
     }
-    
-    //TODO: need to check if user wants to keep updating location in the background when they move around
-    [self.locationManager stopUpdatingLocation];
-    
-    //TODO: this completion handler needs to be in its own function or whatever
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error)
-     {
-         NSString* zipCode = nil;
-         if (!error) {
-             CLPlacemark *placemark = [placemarks objectAtIndex:0];
-             zipCode = [[NSString alloc]initWithString:placemark.postalCode];
-             NSLog(@"%@",zipCode);
-         }
-         else {
-             NSLog(@"Geocode failed with error %@", error); // Error handling must required
-         }
-         
-         //TODO: could possibly put this in its own completionHandler to seperate Location stuff from SettingsWindow
-         if(zipCode != nil) {
+}
+
+- (void) handleZipCode:(NSArray*) placemarks :(NSError*) error {
+    if (!error) {
+        CLPlacemark *placemark = [placemarks objectAtIndex:0];
+        NSString* zipCode = [[NSString alloc]initWithString:placemark.postalCode];
+        
+        if(zipCode != nil) {
             [self.zipCodeTextField setStringValue:zipCode];
-         }
-         
-         //TODO: should be checking if user wants location to automatically update when they move a certain distance
-         [self.locationManager stopUpdatingLocation];
-         [self.locationButton setHidden: NO];
-         [self.locationProgressIndicator stopAnimation: self];
-     }];
+            
+            NSLog(@"zip code retrieved as: %@", zipCode);
+        }
+        
+        //TODO: should be checking if user wants location to automatically update when they move a certain distance
+        [self.locationManager stopUpdatingLocation];
+        [self.locationButton setHidden: NO];
+        [self.locationProgressIndicator stopAnimation: self];
+    }
+    else {
+        NSLog(@"Geocode failed with error %@", error); // Error handling must required
+    }
 }
 
 @end

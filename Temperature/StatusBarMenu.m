@@ -40,7 +40,6 @@ NSString *const TEMPERATURE_STRING_FORMAT = @"%@°";
                         executeDarkSkyRequestSelector:(NSString *) executeDarkSkyRequestSelector
                         statusBarController: (StatusBarController *) statusBarController {
     
-    //TODO: Could probably use a constant for the stringWithFormat values
     NSString *locationString = [NSString stringWithFormat: LOCATION_STRING_FORMAT, location.city, location.stateShort, location.countryShort, location.zipCode];
     NSString *weatherInfoString = [NSString stringWithFormat: WEATHER_INFO_STRING_FORMAT, @"--", @"--"];
     NSString *weatherStatusString = [NSString stringWithFormat: WEATHER_STATUS_STRING_FORMAT, @"--"];

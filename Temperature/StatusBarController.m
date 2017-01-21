@@ -37,7 +37,10 @@
     
     //allocate menu and settings menu item
     self.statusBarMenu = [[StatusBarMenu alloc] init];
-    [self.statusBarMenu initializeMenuItems: self.location openSettingsWindowSelector:@"openSettings" executeDarkSkyRequestSelector:@"executeDarkSkyRequestNoLocation" statusBarController: self];
+    [self.statusBarMenu initializeMenuItems: self.location
+                 openSettingsWindowSelector:@"openSettings"
+                 executeDarkSkyRequestSelector:@"executeDarkSkyRequestNoLocation"
+                 statusBarController: self];
     
     [self setTemperatureFromLocation:self.location.zipCode];
 }
@@ -105,9 +108,6 @@
     
     NSDate *now = [NSDate date];
     
-    //NSLog(@"Now: %@", now);
-    //NSLog(@"Fire Date: %@", self.refreshTimer.fireDate);
-    
     if( [now isGreaterThan: self.refreshTimer.fireDate]) {
         NSLog(@"Firing refresh timer after sleeping for more than the refresh time interval");
         [self.refreshTimer fire];
@@ -115,7 +115,26 @@
     }
 }
 
+//+ (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode;
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode autoUpdateValue:(NSInteger) autoUpdateValue {
+    //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
+    self.refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
+    self.refreshTimeUnit = selectedTimeUnit;
+    self.location.zipCode = zipCode;
+    if(autoUpdateValue == 0) {
+        self.autoUpdateLocation = NO;
+    } else if(autoUpdateValue == 1) {
+        self.autoUpdateLocation = YES;
+    }
+    
+    //go ahead and refresh the temperature based on the new information set in this menu
+    [self setTemperatureFromLocation: zipCode];
+    
+    [self writeDefaults];
+}
+
 - (void) loadDefaults {
+    //TODO: move these strings to Constants file
     //load the last set zip code (or default if its never been set before
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     self.location.zipCode = [defaults stringForKey:@"zipCode"];
@@ -126,10 +145,13 @@
     self.location.countryShort = [defaults stringForKey:@"countryShort"];
     self.refreshTimeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
     self.refreshTimeUnit = [defaults stringForKey:@"refreshTimeUnit"];
+    self.autoUpdateLocation = [defaults boolForKey:@"autoUpdateLocation"];
     NSLog(@"");
 }
 
 - (void) writeDefaults {
+    NSLog(@"StatusBarController: Writing defaults");
+    
     //Write current user values to NSDefaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setValue:self.location.zipCode forKey:@"zipCode"];
@@ -140,13 +162,12 @@
     [defaults setValue:self.location.countryLong forKey:@"countryLong"];
     [defaults setInteger:self.refreshTimeInterval forKey:@"refreshTimeInterval"];
     [defaults setValue:self.refreshTimeUnit forKey:@"refreshTimeUnit"];
+    [defaults setBool:self.autoUpdateLocation forKey:@"autoUpdateLocation"];
     [defaults synchronize];
     
 }
 
 - (void) tearDown {
-    NSLog(@"Writing zip code, time interval, time unit to NSDefaults");
-    
     [self writeDefaults];
 }
 
