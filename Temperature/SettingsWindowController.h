@@ -7,14 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <CoreLocation/CoreLocation.h>
+#import "LocationService.h"
 #import "Util.h"
 
 @interface SettingsWindowController : NSWindowController
 
-@property (strong) IBOutlet NSWindow *settingsWindow;
-
-@property CLLocationManager* locationManager;
+@property (strong) LocationService* locationService;
+@property (strong) IBOutlet NSWindow* settingsWindow;
 @property int refreshTimeInterval;
 @property (weak) IBOutlet NSTextField *zipCodeTextField;
 @property (weak) IBOutlet NSTextField *refreshTimeTextField;
@@ -27,14 +26,8 @@
 - (IBAction)onCancelClick:(NSButton *)sender;
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 - (IBAction)onLocationButtonClick:(NSButton *)sender;
-- (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender;
+- (void) onLocationFound: (NSString*) zipCode;
 
 - (void) adjustWindowPosition;
-- (void) startLocationServices;
-- (void) handleZipCode:(NSArray*) placemarks :(NSError*) error;
-- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation;
-
-//delegate method
-- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations;
 
 @end

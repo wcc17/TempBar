@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120A007C1E33BE0100ED1D98 /* LocationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 120A007B1E33BE0100ED1D98 /* LocationService.m */; };
 		12215FDE1DC0477C0022E13D /* SettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12215FDD1DC0477C0022E13D /* SettingsWindowController.m */; };
 		12215FE21DC047F30022E13D /* SettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12215FE11DC047F30022E13D /* SettingsWindow.xib */; };
 		12215FE51DC04FF70022E13D /* StatusBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12215FE41DC04FF70022E13D /* StatusBarController.m */; };
@@ -42,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		120A007A1E33BE0100ED1D98 /* LocationService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationService.h; sourceTree = "<group>"; };
+		120A007B1E33BE0100ED1D98 /* LocationService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationService.m; sourceTree = "<group>"; };
 		12215FDC1DC0477C0022E13D /* SettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsWindowController.h; sourceTree = "<group>"; };
 		12215FDD1DC0477C0022E13D /* SettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsWindowController.m; sourceTree = "<group>"; };
 		12215FE11DC047F30022E13D /* SettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsWindow.xib; sourceTree = "<group>"; };
@@ -147,6 +150,8 @@
 				129DD00B1DDC06C500A24992 /* StatusBarMenu.m */,
 				128CEDB91E2E822A005111FB /* Weather.h */,
 				128CEDBA1E2E822A005111FB /* Weather.m */,
+				120A007A1E33BE0100ED1D98 /* LocationService.h */,
+				120A007B1E33BE0100ED1D98 /* LocationService.m */,
 			);
 			path = Temperature;
 			sourceTree = "<group>";
@@ -318,6 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				120A007C1E33BE0100ED1D98 /* LocationService.m in Sources */,
 				12DBD75A1D9803C0001EFE98 /* main.m in Sources */,
 				129DD0061DCBD0D700A24992 /* Location.m in Sources */,
 				123AFB711DB6EC0A00EE3D40 /* DarkSkyAPIService.m in Sources */,

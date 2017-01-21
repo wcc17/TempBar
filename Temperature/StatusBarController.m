@@ -30,7 +30,6 @@
 }
 
 - (void) initialize {
-    
     //initialize the location object
     self.location = [[Location alloc] init];
     [self loadDefaults];
@@ -115,7 +114,6 @@
     }
 }
 
-//+ (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode;
 - (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode autoUpdateValue:(NSInteger) autoUpdateValue {
     //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
     self.refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
@@ -145,7 +143,6 @@
     self.location.countryShort = [defaults stringForKey:@"countryShort"];
     self.refreshTimeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
     self.refreshTimeUnit = [defaults stringForKey:@"refreshTimeUnit"];
-    self.autoUpdateLocation = [defaults boolForKey:@"autoUpdateLocation"];
     NSLog(@"");
 }
 
@@ -162,7 +159,6 @@
     [defaults setValue:self.location.countryLong forKey:@"countryLong"];
     [defaults setInteger:self.refreshTimeInterval forKey:@"refreshTimeInterval"];
     [defaults setValue:self.refreshTimeUnit forKey:@"refreshTimeUnit"];
-    [defaults setBool:self.autoUpdateLocation forKey:@"autoUpdateLocation"];
     [defaults synchronize];
     
 }
