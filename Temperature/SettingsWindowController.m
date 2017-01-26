@@ -42,6 +42,9 @@
     int refreshTime = [Util getSecondsFromTimeUnit: [self.refreshTimeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
     [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
     
+    //Get time stepper value for increasing/decreasing later
+    [self.timeStepper setIntValue:refreshTime];
+    
     //turn auto update checkbox on or off depending on StatusBarController.autoUpdateValue
     [self initializeAutoUpdateLocationCheckBox:[StatusBarController instance].autoUpdateLocation];
     
@@ -74,11 +77,8 @@
     [self onAutoUpdateCheck: nil];
 }
 
-//TODO: this only goes up, not down
 - (IBAction)onTimeStepper:(NSStepper *)sender {
-    self.refreshTimeInterval = [self.refreshTimeTextField intValue];
-    self.refreshTimeInterval++;
-    [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", self.refreshTimeInterval]];
+    [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", self.timeStepper.intValue]];
 }
 
 - (IBAction)onLocationButtonClick:(NSButton *)sender {

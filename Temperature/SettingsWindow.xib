@@ -14,6 +14,7 @@
                 <outlet property="refreshTimeTextField" destination="gW0-ce-uEm" id="rfi-AG-Rzb"/>
                 <outlet property="refreshTimeUnitPopUp" destination="nz7-Cn-DOA" id="38T-kR-6mR"/>
                 <outlet property="settingsWindow" destination="QvC-M9-y7g" id="0VP-Rf-8RS"/>
+                <outlet property="timeStepper" destination="6Af-rB-Zrb" id="Svg-96-4Gh"/>
                 <outlet property="zipCodeTextField" destination="sV3-bA-b8d" id="InT-do-IwI"/>
             </connections>
         </customObject>
@@ -93,7 +94,7 @@
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Af-rB-Zrb">
                         <rect key="frame" x="38" y="98" width="19" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="yY9-ke-Ntg"/>
+                        <stepperCell key="cell" alignment="left" maxValue="100" autorepeat="NO" id="yY9-ke-Ntg"/>
                         <connections>
                             <action selector="onTimeStepper:" target="-2" id="ddE-Bf-0Ii"/>
                         </connections>
