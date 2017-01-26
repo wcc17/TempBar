@@ -32,7 +32,7 @@
 
 + (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode {
     //handle response
-    NSLog(@"handling response");
+    NSLog(@"[GoogleGeoAPIService] - Handling Location Response");
     
     NSError *error = nil;
     NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];

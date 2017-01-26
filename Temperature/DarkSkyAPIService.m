@@ -31,7 +31,7 @@
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         //TODO: HANDLE ERRORS
         //TODO: anything useful in response that isnt in data?
-        NSLog(@"Dark sky request made");
+        NSLog(@"[DarkSkyAPIService] - Dark sky request made");
         
         Weather *weather = [self handleWeatherResponse: data];
         completionHandler(weather);
@@ -39,7 +39,7 @@
 }
 
 + (Weather *) handleWeatherResponse:(NSData *) data {
-    NSLog(@"handling weather response");
+    NSLog(@"[DarkSkyAPIService] - Handling weather response");
     
     NSError *error = nil;
     NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];

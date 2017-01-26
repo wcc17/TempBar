@@ -23,11 +23,15 @@
                                             @"countryLong": @"United States",
                                             @"countryShort": @"US",
                                             @"refreshTimeInterval": @3600,
-                                            @"refreshTimeUnit": @"Hour(s)"};
+                                            @"refreshTimeUnit": @"Hour(s)",
+                                            @"autoUpdateLocation": @NO };
     [NSUserDefaults.standardUserDefaults registerDefaults:userDefaultsDefaults];
     
+    //Make sure LocationService is initialized on main thread so its not lost
+    [LocationService instance];
+    
     //Initialize the status menu object
-    [self initializeStatusMenu];
+    [[StatusBarController instance] initialize];
     
     //Sets up application to be notified when computer is put to sleep or woken up
     [self initializeNotifications];
@@ -36,10 +40,6 @@
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
     [[StatusBarController instance] tearDown];
-}
-
-- (void)initializeStatusMenu {
-    [[StatusBarController instance] initialize];
 }
 
 - (void) receiveWakeNote: (NSNotification*) note

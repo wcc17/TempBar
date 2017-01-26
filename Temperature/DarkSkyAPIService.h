@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Location.h"
 #import "Weather.h"
+#import "Util.h"
 
 @interface DarkSkyAPIService : NSObject
 

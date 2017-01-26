@@ -18,8 +18,7 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     
-    NSLog(@"Settings window opened");
-    self.locationService = [[LocationService alloc] init];
+    NSLog(@"[SettingsWindowController] - Settings window opened");
     
     [self adjustWindowPosition];
     
@@ -42,10 +41,28 @@
     //set the refresh time interval
     int refreshTime = [Util getSecondsFromTimeUnit: [self.refreshTimeUnitPopUp titleOfSelectedItem] :timeIntervalFromStatusBar];
     [self.refreshTimeTextField setStringValue:[NSString stringWithFormat:@"%d", refreshTime]];
+    
+    //turn auto update checkbox on or off depending on StatusBarController.autoUpdateValue
+    [self initializeAutoUpdateLocationCheckBox:[StatusBarController instance].autoUpdateLocation];
+    
+    self.isWaitingForLocationServices = NO;
+}
+     
+- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
+    //disable zip code text field if auto update is turned on
+    NSInteger autoLocationState = 0;
+    if(autoUpdateLocation == YES) {
+        autoLocationState = 1;
+    }
+    
+    [self.autoUpdateCheck setState: autoLocationState];
+         
+    //force zip code fields to disable or enable
+    [self onAutoUpdateCheck: nil];
 }
 
 - (void) adjustWindowPosition {
-    NSLog(@"Adjusting settings window position");
+    NSLog(@"[SettingsWindowController] - Adjusting settings window position");
     
     //Puts at center of screen based on pos of status bar and dock. change [[window screen] frame] to [[window screen visibleFrame] to ignore status bar and dock
     CGFloat xPos = NSWidth([[self.settingsWindow screen] visibleFrame])/2 - NSWidth([self.settingsWindow frame])/2;
@@ -62,36 +79,33 @@
 }
 
 - (IBAction)onLocationButtonClick:(NSButton *)sender {
-    NSLog(@"location button clicked");
-    
     [self.locationButton setHidden: YES];
     [self.locationProgressIndicator startAnimation: self];
-    [self.locationService startLocationServices:^(NSString* zipCode){
-        [self onLocationFound:zipCode];
-    }];
+    self.isWaitingForLocationServices = YES;
+    [[LocationService instance] startLocationServices];
 }
 
-- (void) onLocationFound: (NSString*) zipCode {
-    if(zipCode != nil) {
-        [self.zipCodeTextField setStringValue:zipCode];
-        
-        NSLog(@"zip code retrieved as: %@", zipCode);
-    }
-    
+- (void) onLocationButtonComplete:(NSString *) zipCode {
     [self.locationButton setHidden: NO];
     [self.locationProgressIndicator stopAnimation: self];
-    [self.locationService stopLocationServices];
+    self.isWaitingForLocationServices = NO;
     
+    self.zipCodeTextField.stringValue = zipCode;
+}
+
+- (IBAction)onAutoUpdateCheck:(id)sender {
+    [self.zipCodeTextField setEnabled: ![self isAutoUpdateLocation]];
+    [self.locationButton setEnabled: ![self isAutoUpdateLocation]];
 }
 
 - (IBAction)onConfirmClick:(NSButton *)sender {
     NSString *zipCode = self.zipCodeTextField.stringValue;
     NSString *selectedTimeUnit = [self.refreshTimeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.refreshTimeTextField.stringValue;
+    BOOL isAutoUpdate = [self isAutoUpdateLocation];
     
-    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode];
-    //go ahead and refresh the temperature based on the new information set in this menu
-    [[StatusBarController instance] setTemperatureFromLocation: zipCode];
+    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode isAutoUpdate: isAutoUpdate];
+    
     [self.settingsWindow close];
 }
 
@@ -99,47 +113,14 @@
     [self.settingsWindow close];
 }
 
+- (BOOL) isAutoUpdateLocation {
+    NSInteger value = [self.autoUpdateCheck state];
+
+    if(value == 1) {
+        return YES;
+    }
+
+    return NO;
+}
+
 @end
-
-//- (BOOL) isAutoUpdateLocation {
-//    NSInteger value = [self.autoUpdateLocationCheckBox state];
-//    
-//    if(value == 1) {
-//        return YES;
-//    }
-//    
-//    return NO;
-//}
-//- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
-//    //disable zip code text field if auto update is turned on
-//    NSInteger autoLocationState = 0;
-//    if(autoUpdateLocation == YES) {
-//        autoLocationState = 1;
-//    }
-//    [self.autoUpdateLocationCheckBox setState: autoLocationState];
-//
-//    //force zip code fields to disable or enable
-//    [self onAutoUpdateLocationCheckBoxClick: nil];
-//}
-
-//- (IBAction)onAutoUpdateLocationCheckBoxClick:(id)sender {
-//    BOOL autoUpdateLocation = [self isAutoUpdateLocation];
-//
-//    if(autoUpdateLocation == YES) {
-//        NSLog(@"Auto update enabled");
-//        [self.locationButton setEnabled:NO];
-//        [self.zipCodeTextField setEnabled:NO];
-//
-//        //go ahead and retrieve location and then keep location services on
-//        [self.locationService startLocationServices:^(NSString* zipCode){
-//            [self onLocationFound:zipCode];
-//        }];
-//    } else if(autoUpdateLocation == NO) {
-//        NSLog(@"Auto update disabled");
-//        [self.locationButton setEnabled:YES];
-//        [self.zipCodeTextField setEnabled:YES];
-//
-//        //force location services to stop if they aren't already stopped
-//        [self.locationService stopLocationServices];
-//    }
-//}

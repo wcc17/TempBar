@@ -11,10 +11,14 @@
 
 @interface LocationService : NSObject
 
++ (LocationService *) instance;
+
 @property CLLocationManager* locationManager;
 @property void(^completionHandler)(NSString* zipCode);
+@property BOOL isRunning;
 
-- (void) startLocationServices:(void(^)(NSString* zipCode)) completionHandler;
+- (void) initializeLocationService:(void(^)(NSString* zipCode)) completionHandler;
+- (void) startLocationServices;
 - (void) handleZipCode:(NSArray*) placemarks :(NSError*) error;
 - (void) stopLocationServices;
 

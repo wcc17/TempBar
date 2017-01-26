@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Location.h"
+#import "Util.h"
 
 @interface GoogleGeoAPIService : NSObject
 

@@ -9,6 +9,11 @@
 #import <Cocoa/Cocoa.h>
 #import "Location.h"
 #import "Weather.h"
+#import "Util.h"
+
+#define LOCATION_MENU_ITEM_TAG (1)
+#define WEATHER_INFO_MENU_ITEM_TAG (2)
+#define WEATHER_STATUS_MENU_ITEM_TAG (3)
 
 //needed in order to set the menu item's targets to the StatusBarController
 @class StatusBarController;
@@ -18,9 +23,6 @@
 @property (strong, nonatomic) NSMenu *menu;
 @property (strong, nonatomic) NSStatusItem *statusItem;
 
-#define LOCATION_MENU_ITEM_TAG (1)
-#define WEATHER_INFO_MENU_ITEM_TAG (2)
-#define WEATHER_STATUS_MENU_ITEM_TAG (3)
 extern NSString *const LOCATION_STRING_FORMAT;
 extern NSString *const WEATHER_INFO_STRING_FORMAT;
 extern NSString *const WEATHER_STATUS_STRING_FORMAT;

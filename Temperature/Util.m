@@ -22,7 +22,7 @@
         refreshTime *= DAY_IN_SECONDS;
     }
     
-    NSLog(@"Refresh time: %d", refreshTime);
+    NSLog(@"[Util] - Time converted from seconds to %@: %d", selectedTimeUnit, refreshTime);
     
     return refreshTime;
 }
@@ -38,7 +38,7 @@
         refreshTime /= DAY_IN_SECONDS;
     }
     
-    NSLog(@"Refresh time: %d", refreshTime);
+    NSLog(@"[Util] - Time converted from %@ to seconds: %d", selectedTimeUnit, refreshTime);
     
     return refreshTime;
 }

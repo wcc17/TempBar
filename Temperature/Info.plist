@@ -30,9 +30,13 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>To retrieve user&apos;s zip code when the location button is clicked in the settings menu.</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To retrieve user location after a change in location exceeds a kilometer.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To retrieve user location after a change in location exceeds a kilometer.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>To retrieve user location after a change in location exceeds a kilometer.</string>
 </dict>
 </plist>

@@ -11,6 +11,7 @@
 #import "DarkSkyAPIService.h"
 #import "GoogleGeoAPIService.h"
 #import "StatusBarMenu.h"
+#import "Util.h"
 
 @interface StatusBarController : NSObject
 
@@ -29,11 +30,12 @@
 - (void) loadDefaults;
 - (void) tearDown;
 - (void) writeDefaults;
+- (void) onLocationFound: (NSString*) zipCode;
 - (void) setTemperatureFromLocation: (NSString *)zipCode;
 - (void) executeDarkSkyRequest: (Location *) location;
 - (void) executeDarkSkyRequestNoLocation;
 - (void) handleRefreshTimer;
 - (void) handleWakeNotification;
-- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode;
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode isAutoUpdate:(BOOL) isAutoUpdate;
 
 @end

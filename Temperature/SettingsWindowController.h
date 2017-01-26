@@ -12,21 +12,25 @@
 
 @interface SettingsWindowController : NSWindowController
 
-@property (strong) LocationService* locationService;
-@property (strong) IBOutlet NSWindow* settingsWindow;
 @property int refreshTimeInterval;
+@property BOOL isWaitingForLocationServices;
+@property (strong) IBOutlet NSWindow* settingsWindow;
 @property (weak) IBOutlet NSTextField *zipCodeTextField;
 @property (weak) IBOutlet NSTextField *refreshTimeTextField;
 @property (weak) IBOutlet NSPopUpButton *refreshTimeUnitPopUp;
 @property (weak) IBOutlet NSButton *locationButton;
 @property (weak) IBOutlet NSProgressIndicator *locationProgressIndicator;
+@property (weak) IBOutlet NSButton *autoUpdateCheck;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 - (IBAction)onLocationButtonClick:(NSButton *)sender;
-- (void) onLocationFound: (NSString*) zipCode;
+- (IBAction)onAutoUpdateCheck:(id)sender;
 
+- (BOOL) isAutoUpdateLocation;
+- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation;
+- (void) onLocationButtonComplete:(NSString *) zipCode;
 - (void) adjustWindowPosition;
 
 @end

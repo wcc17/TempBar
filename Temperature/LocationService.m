@@ -10,30 +10,45 @@
 
 @implementation LocationService
 
-- (void) startLocationServices:(void(^)(NSString* zipCode)) completionHandler {
++ (LocationService *) instance {
+    static LocationService *sharedInstance = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[LocationService alloc] init];
+    });
+    
+    return sharedInstance;
+}
+
+- (void) initializeLocationService:(void(^)(NSString* zipCode)) completionHandler {
+    self.completionHandler = completionHandler;
+    self.isRunning = NO;
+}
+
+- (void) startLocationServices {
+    //If startLocationServices is called then we're resetting things, so go ahead and stop location services first
+    [self stopLocationServices];
+    
+    NSLog(@"[LocationService] - Starting location services");
     if (nil == self.locationManager) {
         self.locationManager = [[CLLocationManager alloc] init];
     }
     
     self.locationManager.delegate = (id<CLLocationManagerDelegate>) self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-    self.locationManager.distanceFilter = 1000; // meters    
-    self.completionHandler = completionHandler;
+    self.locationManager.distanceFilter = 10; // meters
     
+    [self.locationManager startMonitoringSignificantLocationChanges];
     [self.locationManager startUpdatingLocation];
 }
 
 // Delegate method from the CLLocationManagerDelegate protocol.
 - (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    // If it's a relatively recent event, turn off updates to save power.
     CLLocation* location = [locations lastObject];
-    NSDate* eventDate = location.timestamp;
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
     
-    // If the event is recent, do something with it.
-    if (fabs(howRecent) < 15.0) {
-        //TODO: need to check if user wants to keep updating location in the background when they move around
-        [self.locationManager stopUpdatingLocation];
+    if(self.isRunning == NO) {
+        self.isRunning = YES;
         
         CLGeocoder *geocoder = [[CLGeocoder alloc] init] ;
         [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -50,13 +65,15 @@
         self.completionHandler(zipCode);
     }
     else {
-        NSLog(@"Geocode failed with error %@", error); // Error handling must required
+        NSLog(@"[LocationService] - Geocode failed with error %@", error); // Error handling must required
         self.completionHandler(nil);
     }
 }
 
 - (void) stopLocationServices {
+    NSLog(@"[LocationService] - Stopping location services");
     [self.locationManager stopUpdatingLocation];
+    self.locationManager = nil;
 }
 
 @end
