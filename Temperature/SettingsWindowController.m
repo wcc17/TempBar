@@ -47,6 +47,19 @@
     
     self.isWaitingForLocationServices = NO;
 }
+
+- (void) adjustWindowPosition {
+    NSLog(@"[SettingsWindowController] - Adjusting settings window position");
+    
+    //open window at front of screen
+    [NSApp activateIgnoringOtherApps:YES];
+    
+    //Puts at center of screen based on pos of status bar and dock. change [[window screen] frame] to [[window screen visibleFrame] to ignore status bar and dock
+    CGFloat xPos = NSWidth([[self.settingsWindow screen] visibleFrame])/2 - NSWidth([self.settingsWindow frame])/2;
+    CGFloat yPos = NSHeight([[self.settingsWindow screen] visibleFrame])/2 - NSHeight([self.settingsWindow frame])/2;
+    
+    [self.settingsWindow setFrame:NSMakeRect(xPos, yPos, NSWidth([self.settingsWindow frame]), NSHeight([self.settingsWindow frame])) display:YES];
+}
      
 - (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
     //disable zip code text field if auto update is turned on
@@ -59,16 +72,6 @@
          
     //force zip code fields to disable or enable
     [self onAutoUpdateCheck: nil];
-}
-
-- (void) adjustWindowPosition {
-    NSLog(@"[SettingsWindowController] - Adjusting settings window position");
-    
-    //Puts at center of screen based on pos of status bar and dock. change [[window screen] frame] to [[window screen visibleFrame] to ignore status bar and dock
-    CGFloat xPos = NSWidth([[self.settingsWindow screen] visibleFrame])/2 - NSWidth([self.settingsWindow frame])/2;
-    CGFloat yPos = NSHeight([[self.settingsWindow screen] visibleFrame])/2 - NSHeight([self.settingsWindow frame])/2;
-    
-    [self.settingsWindow setFrame:NSMakeRect(xPos, yPos, NSWidth([self.settingsWindow frame]), NSHeight([self.settingsWindow frame])) display:YES];
 }
 
 //TODO: this only goes up, not down
