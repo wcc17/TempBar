@@ -159,6 +159,9 @@
     if(isAutoUpdate == YES) {
         [[LocationService instance] startLocationServices];
     } else {
+        //Need to stop location services or they'll stay on after user turns off auto update
+        [[LocationService instance] stopLocationServices];
+        
         //go ahead and refresh the temperature based on the new information set in this menu
         [self setTemperatureFromLocation: zipCode];
     }
