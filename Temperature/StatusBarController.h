@@ -19,6 +19,8 @@
 @property (strong, nonatomic) NSTimer *refreshTimer;
 @property (strong, nonatomic) Location *location;
 @property (strong, nonatomic) StatusBarMenu *statusBarMenu;
+@property int weatherRequestRetries;
+@property int locationRequestRetries;
 @property int refreshTimeInterval;
 @property BOOL autoUpdateLocation;
 @property NSString* refreshTimeUnit;

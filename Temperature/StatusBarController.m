@@ -57,7 +57,22 @@
 //Get location from Google and then get the temperature from DarkSkyAPI
 - (void) setTemperatureFromLocation: (NSString *) zipCode {
     [GoogleGeoAPIService makeLocationRequest:zipCode completionHandler:^(Location *loc){
-        [self executeDarkSkyRequest: loc];
+        if(loc != nil) {
+            self.locationRequestRetries = 0;
+            [self executeDarkSkyRequest: loc];
+        } else {
+            self.locationRequestRetries++;
+            
+            if(self.locationRequestRetries < 3) {
+                //TODO: any way to easilyi add a time delay here?
+                NSLog(@"[StatusBarController] - retrying location request");
+                [self setTemperatureFromLocation:zipCode];
+            } else {
+                //TODO: need to show user error message
+                //throw away this request and reset retries until request is triggered again in normal way
+                self.locationRequestRetries = 0;
+            }
+        }
     }];
 }
 
@@ -104,14 +119,29 @@
     
     //execute darksky request and handle the data thats returned
     [DarkSkyAPIService makeWeatherRequest: self.location completionHandler:^(Weather* weather) {
-        NSLog(@"[StatusBarController] - recieved dark sky api response");
-        NSLog(@"[StatusBarController] - temperature: %@", weather.currentTemperature);
-        NSLog(@"[StatusBarController] - high temperature: %@", weather.highTemperature);
-        NSLog(@"[StatusBarController] - low temperature: %@", weather.lowTemperature);
-        NSLog(@"[StatusBarController] - current weather status: %@", weather.status);
-    
-        [self.statusBarMenu setMenuItemValues:self.location weather: weather];
-        [self handleRefreshTimer];
+        if(weather != nil) {
+            self.weatherRequestRetries = 0;
+            NSLog(@"[StatusBarController] - recieved dark sky api response");
+            NSLog(@"[StatusBarController] - temperature: %@", weather.currentTemperature);
+            NSLog(@"[StatusBarController] - high temperature: %@", weather.highTemperature);
+            NSLog(@"[StatusBarController] - low temperature: %@", weather.lowTemperature);
+            NSLog(@"[StatusBarController] - current weather status: %@", weather.status);
+            
+            [self.statusBarMenu setMenuItemValues:self.location weather: weather];
+            [self handleRefreshTimer];
+        } else {
+            self.weatherRequestRetries++;
+            
+            if(self.weatherRequestRetries < 3) {
+                //TODO: any way to easily add a time delay here?
+                NSLog(@"[StatusBarController] - retrying weather request");
+                [self executeDarkSkyRequest:loc];
+            } else {
+                //TODO: need to show user error message
+                //throw away this request and reset retries until request is triggered again in normal way
+                self.weatherRequestRetries = 0;
+            }
+        }
     }];
 }
 

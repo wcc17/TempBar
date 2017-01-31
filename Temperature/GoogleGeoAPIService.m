@@ -23,15 +23,15 @@
     
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        //TODO: HANDLE ERRORS
-        
-        Location *location = [self handleLocationResponse: data :zipCode];
+        Location* location = nil;
+        if(error == nil) {
+            location = [self handleLocationResponse: data :zipCode];
+        }
         completionHandler(location);
     }] resume];
 }
 
 + (Location *) handleLocationResponse:(NSData *) data :(NSString *) zipCode {
-    //handle response
     NSLog(@"[GoogleGeoAPIService] - Handling Location Response");
     
     NSError *error = nil;
@@ -48,7 +48,6 @@
         NSArray *addressComponentsDict = [resultsDict objectForKey:@"address_components"];
         for(NSDictionary *dict in addressComponentsDict) {
             NSArray *types = [dict objectForKey:@"types"];
-            
             NSString *longName = [dict objectForKey:@"long_name"];
             NSString *shortName = [dict objectForKey:@"short_name"];
             if([types containsObject:@"locality"]) {
@@ -83,6 +82,8 @@
         return location;
     }
     
+    //will just return nil if error happens. completion handler will handle the nil value accordingly
+    //by retrying or just throwing the reuqest away and waiting until later
     return nil;
 }
 

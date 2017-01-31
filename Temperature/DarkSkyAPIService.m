@@ -29,11 +29,10 @@
     //execute request and pass the temperature data to the completionHandler passed to this method
     NSURLSession *session = [NSURLSession sharedSession];
     [[session dataTaskWithURL:requestURL completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        //TODO: HANDLE ERRORS
-        //TODO: anything useful in response that isnt in data?
-        NSLog(@"[DarkSkyAPIService] - Dark sky request made");
-        
-        Weather *weather = [self handleWeatherResponse: data];
+        Weather *weather = nil;
+        if(error == nil) {
+            weather = [self handleWeatherResponse: data];
+        }
         completionHandler(weather);
     }] resume];
 }
@@ -63,6 +62,8 @@
         return weather;
     }
     
+    //will return nil if error happens. completion handler will handle the nil value accordingly
+    //by retrying or just throwing the request away and trying again later
     return nil;
 }
 
