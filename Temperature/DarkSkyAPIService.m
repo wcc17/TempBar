@@ -40,26 +40,29 @@
 + (Weather *) handleWeatherResponse:(NSData *) data {
     NSLog(@"[DarkSkyAPIService] - Handling weather response");
     
-    NSError *error = nil;
-    NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    if(error == nil) {
-        NSDictionary *currentlyDict = [root objectForKey:@"currently"];
-        NSNumber* temperature = [NSNumber numberWithInt:[[currentlyDict objectForKey:@"temperature"] intValue]];
-        NSString* weatherStatus = [currentlyDict objectForKey:@"summary"];
+    if(data != nil) {
+        NSError *error = nil;
         
-        NSDictionary* dailyDict = [root objectForKey:@"daily"];
-        NSArray* dataArray = [dailyDict objectForKey:@"data"];
-        NSDictionary* todayDict = dataArray[0];
-        NSNumber* highTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMax"] intValue]];
-        NSNumber* lowTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMin"] intValue]];
-        
-        Weather* weather = [[Weather alloc] init];
-        weather.currentTemperature = temperature;
-        weather.highTemperature = highTemperature;
-        weather.lowTemperature = lowTemperature;
-        weather.status = weatherStatus;
-        
-        return weather;
+        NSDictionary *root = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        if(error == nil) {
+            NSDictionary *currentlyDict = [root objectForKey:@"currently"];
+            NSNumber* temperature = [NSNumber numberWithInt:[[currentlyDict objectForKey:@"temperature"] intValue]];
+            NSString* weatherStatus = [currentlyDict objectForKey:@"summary"];
+            
+            NSDictionary* dailyDict = [root objectForKey:@"daily"];
+            NSArray* dataArray = [dailyDict objectForKey:@"data"];
+            NSDictionary* todayDict = dataArray[0];
+            NSNumber* highTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMax"] intValue]];
+            NSNumber* lowTemperature = [NSNumber numberWithInt:[[todayDict objectForKey:@"temperatureMin"] intValue]];
+            
+            Weather* weather = [[Weather alloc] init];
+            weather.currentTemperature = temperature;
+            weather.highTemperature = highTemperature;
+            weather.lowTemperature = lowTemperature;
+            weather.status = weatherStatus;
+            
+            return weather;
+        }
     }
     
     //will return nil if error happens. completion handler will handle the nil value accordingly
