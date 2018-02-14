@@ -46,12 +46,7 @@
         [[StatusBarController instance] onLocationFound:zipCode];
     }];
     
-    //start location services if auto update is enabled
-    if(self.autoUpdateLocation == YES) {
-        [[LocationService instance] startLocationServices];
-    } else {
-        [self setTemperatureFromLocation:self.location.zipCode];
-    }
+    [self setTemperatureFromLocation:self.location.zipCode];
 }
 
 //Get location from Google and then get the temperature from DarkSkyAPI
@@ -91,10 +86,7 @@
         [self setTemperatureFromLocation:zipCode];
     }
     
-    //If auto update is turned off, turn off location services
-    if(self.autoUpdateLocation != YES) {
-        [[LocationService instance] stopLocationServices];
-    }
+    [[LocationService instance] stopLocationServices];
     
     //let LocationService look for another location if it needs to now
     if([LocationService instance].isRunning == YES) {
@@ -178,23 +170,17 @@
     }
 }
 
-- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode isAutoUpdate:(BOOL) isAutoUpdate {
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode {
     //set the amount of time and the time unit in StatusBarController to save the values and reuse them. also set the new zip code
     self.refreshTimeInterval = [Util convertSecondsToTimeUnit:selectedTimeUnit :timeText];
     self.refreshTimeUnit = selectedTimeUnit;
     self.location.zipCode = zipCode;
-    self.autoUpdateLocation = isAutoUpdate;
     
-    //start location services if auto update is checked
-    if(isAutoUpdate == YES) {
-        [[LocationService instance] startLocationServices];
-    } else {
-        //Need to stop location services or they'll stay on after user turns off auto update
-        [[LocationService instance] stopLocationServices];
-        
-        //go ahead and refresh the temperature based on the new information set in this menu
-        [self setTemperatureFromLocation: zipCode];
-    }
+    //turn off location services in case
+    [[LocationService instance] stopLocationServices];
+    
+    //go ahead and refresh the temperature based on the new information set in this menu
+    [self setTemperatureFromLocation: zipCode];
     
     [self writeDefaults];
 }
@@ -211,7 +197,6 @@
     self.location.countryShort = [defaults stringForKey:@"countryShort"];
     self.refreshTimeInterval = (int)[defaults integerForKey:@"refreshTimeInterval"];
     self.refreshTimeUnit = [defaults stringForKey:@"refreshTimeUnit"];
-    self.autoUpdateLocation = [defaults boolForKey:@"autoUpdateLocation"];
 }
 
 - (void) writeDefaults {
@@ -227,7 +212,6 @@
     [defaults setValue:self.location.countryLong forKey:@"countryLong"];
     [defaults setInteger:self.refreshTimeInterval forKey:@"refreshTimeInterval"];
     [defaults setValue:self.refreshTimeUnit forKey:@"refreshTimeUnit"];
-    [defaults setBool:self.autoUpdateLocation forKey:@"autoUpdateLocation"];
     [defaults synchronize];
     
 }

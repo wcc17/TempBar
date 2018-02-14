@@ -23,8 +23,7 @@
                                             @"countryLong": @"United States",
                                             @"countryShort": @"US",
                                             @"refreshTimeInterval": @3600,
-                                            @"refreshTimeUnit": @"Hour(s)",
-                                            @"autoUpdateLocation": @NO };
+                                            @"refreshTimeUnit": @"Hour(s)" };
     [NSUserDefaults.standardUserDefaults registerDefaults:userDefaultsDefaults];
     
     //Make sure LocationService is initialized on main thread so its not lost

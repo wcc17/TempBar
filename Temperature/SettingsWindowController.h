@@ -20,17 +20,13 @@
 @property (weak) IBOutlet NSPopUpButton *refreshTimeUnitPopUp;
 @property (weak) IBOutlet NSButton *locationButton;
 @property (weak) IBOutlet NSProgressIndicator *locationProgressIndicator;
-@property (weak) IBOutlet NSButton *autoUpdateCheck;
 @property (weak) IBOutlet NSStepper *timeStepper;
 
 - (IBAction)onConfirmClick:(NSButton *)sender;
 - (IBAction)onCancelClick:(NSButton *)sender;
 - (IBAction)onTimeStepper:(NSStepper *)sender;
 - (IBAction)onLocationButtonClick:(NSButton *)sender;
-- (IBAction)onAutoUpdateCheck:(id)sender;
 
-- (BOOL) isAutoUpdateLocation;
-- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation;
 - (void) onLocationButtonComplete:(NSString *) zipCode;
 - (void) adjustWindowPosition;
 

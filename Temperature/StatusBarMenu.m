@@ -13,7 +13,7 @@
 NSString *const LOCATION_STRING_FORMAT = @"%@, %@ %@ %@";
 NSString *const WEATHER_INFO_STRING_FORMAT = @"H: %@ L: %@";
 NSString *const WEATHER_STATUS_STRING_FORMAT = @"Currently: %@";
-NSString *const TEMPERATURE_STRING_FORMAT = @"%@°";
+NSString *const TEMPERATURE_STRING_FORMAT = @"%@°F";
 
 - (id) init {
     self = [super init];

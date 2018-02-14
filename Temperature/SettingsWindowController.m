@@ -45,9 +45,6 @@
     //Get time stepper value for increasing/decreasing later
     [self.timeStepper setIntValue:refreshTime];
     
-    //turn auto update checkbox on or off depending on StatusBarController.autoUpdateValue
-    [self initializeAutoUpdateLocationCheckBox:[StatusBarController instance].autoUpdateLocation];
-    
     self.isWaitingForLocationServices = NO;
 }
 
@@ -62,19 +59,6 @@
     CGFloat yPos = NSHeight([[self.settingsWindow screen] visibleFrame])/2 - NSHeight([self.settingsWindow frame])/2;
     
     [self.settingsWindow setFrame:NSMakeRect(xPos, yPos, NSWidth([self.settingsWindow frame]), NSHeight([self.settingsWindow frame])) display:YES];
-}
-     
-- (void) initializeAutoUpdateLocationCheckBox: (BOOL) autoUpdateLocation {
-    //disable zip code text field if auto update is turned on
-    NSInteger autoLocationState = 0;
-    if(autoUpdateLocation == YES) {
-        autoLocationState = 1;
-    }
-    
-    [self.autoUpdateCheck setState: autoLocationState];
-         
-    //force zip code fields to disable or enable
-    [self onAutoUpdateCheck: nil];
 }
 
 - (IBAction)onTimeStepper:(NSStepper *)sender {
@@ -96,34 +80,18 @@
     self.zipCodeTextField.stringValue = zipCode;
 }
 
-- (IBAction)onAutoUpdateCheck:(id)sender {
-    [self.zipCodeTextField setEnabled: ![self isAutoUpdateLocation]];
-    [self.locationButton setEnabled: ![self isAutoUpdateLocation]];
-}
-
 - (IBAction)onConfirmClick:(NSButton *)sender {
     NSString *zipCode = self.zipCodeTextField.stringValue;
     NSString *selectedTimeUnit = [self.refreshTimeUnitPopUp titleOfSelectedItem];
     NSString *timeText = self.refreshTimeTextField.stringValue;
-    BOOL isAutoUpdate = [self isAutoUpdateLocation];
     
-    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode isAutoUpdate: isAutoUpdate];
+    [[StatusBarController instance] updateStatusBarValues: timeText selectedTimeUnit: selectedTimeUnit zipCode: zipCode];
     
     [self.settingsWindow close];
 }
 
 - (IBAction)onCancelClick:(NSButton *)sender {
     [self.settingsWindow close];
-}
-
-- (BOOL) isAutoUpdateLocation {
-    NSInteger value = [self.autoUpdateCheck state];
-
-    if(value == 1) {
-        return YES;
-    }
-
-    return NO;
 }
 
 @end

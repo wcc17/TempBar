@@ -22,7 +22,6 @@
 @property int weatherRequestRetries;
 @property int locationRequestRetries;
 @property int refreshTimeInterval;
-@property BOOL autoUpdateLocation;
 @property NSString* refreshTimeUnit;
 @property (strong, nonatomic) NSDate *sleepDate;
 
@@ -38,6 +37,6 @@
 - (void) executeDarkSkyRequestNoLocation;
 - (void) handleRefreshTimer;
 - (void) handleWakeNotification;
-- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode isAutoUpdate:(BOOL) isAutoUpdate;
+- (void) updateStatusBarValues:(NSString *)timeText selectedTimeUnit:(NSString *)selectedTimeUnit zipCode:(NSString*) zipCode;
 
 @end
